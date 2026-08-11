@@ -15,5 +15,24 @@
     "09-references": true,
     "99-inbox": true
   },
-  "id_namespaces": ["DEC", "SRC", "ACT", "Q", "REQ-FUN", "REQ-NFR", "BR"]
+  "id_namespaces": [
+    "DEC",
+    "SRC",
+    "ACT",
+    "Q",
+    "REQ-FUN",
+    "REQ-NFR",
+    "BR"
+  ],
+  "harness": {
+    "source": "../ml-python-base",
+    "external_skills": [
+      "brainstorming",
+      "brainstorm_quick",
+      "writing-plans",
+      "writing-clearly-and-concisely",
+      "research_current_info",
+      "retrospective"
+    ]
+  }
 }

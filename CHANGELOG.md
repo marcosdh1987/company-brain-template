@@ -3,6 +3,16 @@
 Semver by tags (`vX.Y.Z`). `MINOR` = new sections/templates; `PATCH` = content
 fixes; `MAJOR` = folder restructures that break consumer adapters.
 
+## [1.1.0]
+
+### Added
+- Harness skill sync: `brain.config.json` `harness` section + `make
+  sync-skills` — pulls non-code working skills from `ml-python-base` into
+  `.github/skills-external/` (lockfile `skills-lock.json`) and regenerates
+  native tool projections (`.claude/skills/`, `.codex/skills/`,
+  `.agents/skills/` + Antigravity rules pointer) so Claude Code, Codex and
+  Antigravity discover internal + external skills. `docs/skills.md`.
+
 ## [1.0.0]
 
 ### Changed (BREAKING)

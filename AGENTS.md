@@ -87,6 +87,24 @@ When processing a transcript, email, or inbox file, extract in this order:
 Then mark the source as processed (see `99-inbox/README.md`) — evidence stays
 for traceability, but its extraction is done.
 
+## Skills
+
+Two kinds, one discovery surface:
+
+- **Internal (lifecycle)** — source of truth `.github/skills/*.md`: bootstrap,
+  process_meeting, record_decision, add_runbook, update_domain_context,
+  quarterly_context_review. Distributed with this template's releases.
+- **External (working skills)** — synced from the engineering harness into
+  `.github/skills-external/` per the `harness` section of `brain.config.json`
+  (default set: brainstorming, brainstorm_quick, writing-plans,
+  writing-clearly-and-concisely, research_current_info, retrospective).
+  Source of truth is the harness — improve them there, resync here.
+
+`make sync-skills` refreshes the external set (lockfile: `skills-lock.json`)
+and regenerates the native projections `.claude/skills/`, `.codex/skills/`,
+`.agents/skills/` so Claude Code, Codex, and Antigravity discover every skill.
+Projections are generated — never edit them by hand.
+
 ## Exit gate
 
 `make validate` must pass before any merge. It checks structure (per

@@ -97,6 +97,16 @@ Full rationale, CI variant, and degradation behavior: [`docs/workspace.md`](docs
 | `make validate` | Structure (per config), links, duplicate IDs, unsourced decisions, status debt |
 | `make workspace` | Clone all code repos from `repos.yaml` as siblings of this repo |
 | `make stats` | Content stats per active module |
+| `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` projections |
+
+## Skills and multi-tool discovery
+
+The brain ships its 6 lifecycle skills and **syncs working skills**
+(brainstorming, planning, research, writing, retrospectives) from the
+engineering harness — declared in `brain.config.json`, locked in
+`skills-lock.json`. `make sync-skills` also regenerates native projections so
+**Claude Code/app, Codex, and Antigravity** all discover every skill. Details:
+[`docs/skills.md`](docs/skills.md).
 
 ## Principles
 

@@ -20,3 +20,6 @@ stats:  ## Content stats per active module
 mods=[m for m,on in cfg['modules'].items() if on and pathlib.Path(m).is_dir()]; \
 print('Files and words per active module:'); \
 [print('  %-20s %3d files %7d words' % (m, len(list(pathlib.Path(m).rglob('*.md'))), sum(len(p.read_text(encoding='utf-8').split()) for p in pathlib.Path(m).rglob('*.md')))) for m in mods]"
+
+sync-skills:  ## Sync working skills from the harness + regenerate tool projections
+	python3 scripts/sync_skills.py

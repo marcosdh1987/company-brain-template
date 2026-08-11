@@ -3,7 +3,8 @@
 __pycache__/
 .venv/
 .env
-.claude/
+.claude/*
+!.claude/skills/
 .cursor/
 .copilot/
 .obsidian/
