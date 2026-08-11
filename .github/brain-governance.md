@@ -4,28 +4,29 @@
 
 | Belongs | Does not belong |
 |---|---|
-| Durable organizational context (domain, decisions, conventions, systems map, runbooks, glossary) | Product code |
-| Cross-cutting learnings and patterns (`memory/`) | Docs of a specific repo (they go in that repo) |
-| The organization's AI policy | Engineering skills/rules (they go in the harness) |
-| | Secrets, credentials, personal data |
+| Durable engagement context: domain, decisions, requirements, conventions, systems, vendors | Product code |
+| Registered evidence (contracts, transcripts, vendor docs) with a source register | Docs of a specific repo (they go in that repo) |
+| The organization's AI policy and ways of working | Engineering skills/rules enforcement (that is the harness) |
+| | Secrets, credentials, unnecessary personal data |
 
 ## How it changes
 
-- Content changes: normal PR, approved by the section owner
-  (`brain/team/ownership.md`).
-- Decisions: an accepted one is never edited; it is superseded by a new ADR.
-- Folder structure: it is a public interface (other repos' adapters reference
-  it) — changing it is `MAJOR` and requires an ADR.
+- Content: normal PR, approved by the module owner
+  (`02-organization/ownership.md`). The PR checklist enforces sourcing.
+- Decisions: immutable — supersede with a new DEC, never edit.
+- Module structure: public interface (consumer adapters reference it) —
+  changing it is `MAJOR` and requires a DEC.
+- Operating rules live ONLY in `AGENTS.md`; tool adapters point at it.
+  Never grow a second rule set in an adapter file.
 
 ## Quality
 
-- `make validate` must pass on every PR: complete structure, no broken links.
-- `_PENDING_` markers are visible debt: the goal of the bootstrap and the
-  quarterly reviews is to drive them to zero in active sections.
+- `make validate` must pass on every PR.
+- `_PENDING_` placeholders, unprocessed inbox files, and unsourced decisions
+  are visible debt; bootstrap and quarterly reviews drive them down.
 
 ## Relationship to the harness
 
-This repo is the **context** layer (what the organization knows). The harness is
-the **execution** layer (how work is done). Code repos import both from their
-adapters. The `bootstrap_company_brain` skill and the maintenance skills are
-distributed with the harness; this repo only references them.
+This repo is the **context** layer (what the organization knows and how it
+works, declared). The harness is the **execution** layer (how work is done,
+enforced). Code repos import both from their adapters.

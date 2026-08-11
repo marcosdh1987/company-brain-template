@@ -2,44 +2,73 @@
 """Instantiate the company-brain template for one organization.
 
 Usage:
-    python3 scripts/init_brain.py --org "Acme S.A." [--dry-run]
+    python3 scripts/init_brain.py --org "Acme Inc." [--profile consulting] [--dry-run]
 
-Replaces the organization placeholder across the repo, stamps today's date in the
-founding ADR, resets the CHANGELOG, and prints the bootstrap checklist. Idempotent:
-running it twice is safe.
+Profiles preselect active modules in brain.config.json:
+  consulting        strategy/oversight work, no code repos yet
+  delivery-oversight validating a vendor's delivery
+  development       the org has code repos we work on
+  full              everything on (default)
+
+The script replaces the __ORG_NAME__ placeholder, stamps the founding DEC
+date, writes the config, and lists module folders that can be deleted for the
+chosen profile (it never deletes them itself).
 """
 from __future__ import annotations
 
 import argparse
 import datetime
+import json
 import pathlib
 import sys
 
 PLACEHOLDER = "__ORG_NAME__"
-SKIP_DIRS = {".git", ".venv", "__pycache__"}
-TEXT_EXT = {".md", ".yml", ".yaml", ".toml", ".txt"}
+SKIP_DIRS = {".git", ".venv", "__pycache__", "_to_delete"}
+TEXT_EXT = {".md", ".yml", ".yaml", ".toml", ".txt", ".json"}
 
-
-def iter_files(root: pathlib.Path):
-    for p in root.rglob("*"):
-        if p.is_file() and p.suffix in TEXT_EXT and not (set(p.parts) & SKIP_DIRS):
-            yield p
+PROFILES = {
+    "consulting": {"03-projects": True, "04-architecture": True, "05-requirements": True,
+                   "07-delivery": True, "08-vendors": True, "02-organization": True},
+    "delivery-oversight": {"03-projects": True, "04-architecture": False,
+                           "05-requirements": True, "07-delivery": True,
+                           "08-vendors": True, "02-organization": False},
+    "development": {"03-projects": True, "04-architecture": True, "05-requirements": True,
+                    "07-delivery": True, "08-vendors": False, "02-organization": True},
+    "full": {},
+}
+CORE = ["00-context", "01-meetings", "06-decisions", "09-references", "99-inbox"]
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--org", required=True, help="Organization name")
+    ap.add_argument("--org", required=True)
+    ap.add_argument("--profile", default="full", choices=sorted(PROFILES))
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
     root = pathlib.Path(__file__).resolve().parent.parent
     today = datetime.date.today().isoformat()
-    changed = []
 
-    for f in iter_files(root):
+    cfg_path = root / "brain.config.json"
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    cfg["org"] = args.org
+    cfg["profile"] = args.profile
+    overrides = PROFILES[args.profile]
+    for mod in cfg["modules"]:
+        if mod in CORE:
+            cfg["modules"][mod] = True
+        elif overrides:
+            cfg["modules"][mod] = overrides.get(mod, False)
+    if not args.dry_run:
+        cfg_path.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
+
+    changed = []
+    for f in root.rglob("*"):
+        if not f.is_file() or f.suffix not in TEXT_EXT or (set(f.parts) & SKIP_DIRS):
+            continue
         text = f.read_text(encoding="utf-8")
         new = text.replace(PLACEHOLDER, args.org)
-        if f.name == "0001-adopt-harness-and-company-brain.md":
+        if f.name == "decision-log.md":
             new = new.replace("_set at bootstrap_", today)
         if new != text:
             changed.append(f.relative_to(root))
@@ -49,11 +78,16 @@ def main() -> int:
     verb = "Would update" if args.dry_run else "Updated"
     for c in changed:
         print(f"{verb}: {c}")
-    print(f"\nOrganization: {args.org}")
-    print("Next steps (see .github/skills/bootstrap_company_brain.md):")
-    print("  1. Run the bootstrap skill with your AI assistant to populate the brain")
-    print("  2. make validate   # must pass before sharing")
-    print("  3. Point client repos at this brain (docs/adoption.md)")
+    off = [m for m, on in cfg["modules"].items() if not on]
+    print(f"\nOrganization: {args.org}  ·  Profile: {args.profile}")
+    if off:
+        print("Inactive modules (folders may be deleted, validator ignores them):")
+        for m in off:
+            print(f"  {m}/")
+    print("\nNext steps:")
+    print("  1. Run the bootstrap skill (.github/skills/bootstrap_company_brain.md)")
+    print("  2. make validate")
+    print("  3. Register code repos in 04-architecture/repos.yaml, then: make workspace")
     return 0
 
 

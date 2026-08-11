@@ -1,0 +1,19 @@
+{
+  "org": "__ORG_NAME__",
+  "language": "en",
+  "profile": "full",
+  "modules": {
+    "00-context": true,
+    "01-meetings": true,
+    "02-organization": true,
+    "03-projects": true,
+    "04-architecture": true,
+    "05-requirements": true,
+    "06-decisions": true,
+    "07-delivery": true,
+    "08-vendors": true,
+    "09-references": true,
+    "99-inbox": true
+  },
+  "id_namespaces": ["DEC", "SRC", "ACT", "Q", "REQ-FUN", "REQ-NFR", "BR"]
+}

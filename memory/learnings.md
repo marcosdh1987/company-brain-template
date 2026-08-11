@@ -1,7 +1,7 @@
-# Learnings (organization level)
+# Learnings (engagement level)
 
-> Durable lessons that transcend a single project. If a learning applies to one
-> repo only, it belongs in that repo's `memory/`, not here. Format: date,
-> context, learning, evidence (link to PR/issue/lab run if one exists).
+> Durable lessons that transcend a single project, plus the dated reports of
+> each `quarterly_context_review`. Single-repo learnings go in that repo's
+> `memory/`.
 
 - _PENDING_ — filled during operation, not at bootstrap.

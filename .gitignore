@@ -3,3 +3,8 @@
 __pycache__/
 .venv/
 .env
+.claude/
+.cursor/
+.copilot/
+.obsidian/
+_to_delete/

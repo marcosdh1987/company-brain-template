@@ -1,93 +1,109 @@
-# Company Brain Template
+# Company Brain Template — v1.0
 
-Template for instantiating an organization's **company brain**: the source of
-truth for its context — domain, decisions, glossary, conventions, systems map,
-and runbooks — structured to be read by AI agents and by people.
-
-It is the **context** layer that complements the **execution** layer (the
+Template for instantiating a **company brain**: the persistent, agent-readable
+knowledge base for an engagement with one organization — its context,
+decisions, requirements, conventions, systems, vendors, and evidence. It is
+the **context** layer that complements the **execution** layer (the
 engineering harness, [`ml-python-base`](https://github.com/marcosdh1987/ml-python-base)).
-The organization's code repositories import both from their adapters:
+
+This structure is not theoretical: it consolidates what two real client brains
+converged on independently, plus the traceability patterns they developed
+(status vocabulary, source registers, promotion pipeline).
+
+## The core idea: an evidence → knowledge pipeline
 
 ```text
-shared harness (template releases)             ← how work is done (engine, ours)
-        +
-the organization's company brain (this repo)   ← what the org knows (context, theirs)
-        =
-effective context of every repo (CLAUDE.md / AGENTS.md point at both)
+raw material           promotion               canonical knowledge
+99-inbox/          →   analyze, extract,   →   06-decisions/  05-requirements/
+01-meetings/           validate, cite          00-context/    03-projects/ …
+09-references/
 ```
 
-The separation is deliberate: the engine is reused across organizations and
-updated through releases; the brain is owned by each organization and evolves
-with its business. Everything is versioned Markdown in git — no lock-in.
+Raw material is **evidence, not facts**. Everything promoted into canonical
+documents carries a status (`CONFIRMED` / `PENDING VALIDATION` / `INFERRED` /
+`SUPERSEDED` / `BLOCKED`) and a source. The full rules live in
+[`AGENTS.md`](AGENTS.md) — the single source of operating instructions.
 
 ## When to use it (and when not to)
 
-**This template is the *second* repo's step, not the first one's.** A single-repo
-engagement does not need a separate brain: the project brain lives inside the
-repo, in the containers the harness already ships (`memory/`, `docs/adr/`,
-`.github/domain-boundaries.md`). Instantiating this template there is overhead.
-
-The right trigger is observable: **a second repo of the same project/client
-starts duplicating context** (glossary, business rules, conventions). That day,
-the shared part is *moved* (not copied) here and both repos point at it. The
-guide documents this step by step in "Adopting the Harness in an Existing
-Project".
+**Not on day one of a single-repo project.** There, the project brain lives
+inside the code repo (`memory/`, `docs/adr/`). This template earns its place
+when the engagement spans **more than one repo, more than one project, or a
+consulting relationship** where evidence and decisions must outlive any single
+codebase. Full progression: the harness guide's "Adopting the Harness in an
+Existing Project".
 
 ## Quick start
 
 ```bash
-# 1. Instantiate for an organization
-make init ORG="Acme Inc."
+# 1. Instantiate (choose an engagement profile)
+make init ORG="Acme Inc." PROFILE=consulting
+#    profiles: consulting | delivery-oversight | development | full
 
-# 2. Populate the brain with the bootstrap skill (from your AI assistant)
+# 2. Populate with the bootstrap skill (from your AI assistant)
 #    → .github/skills/bootstrap_company_brain.md
-#    Mine repos/docs first, interview second, invent nothing.
+#    Mine sources first, interview second, invent nothing.
+#    Taking over an org with history? The skill has a migration mode:
+#    everything into 99-inbox → source register → gradual promotion.
 
 # 3. Validate
 make validate
 
-# 4. Connect the organization's repositories
-#    → docs/adoption.md (ready-to-paste snippet in examples/repo-claude-md-snippet.md)
+# 4. If the org has code repos: register them and clone the workspace
+#    → 04-architecture/repos.yaml, then: make workspace
 ```
 
-## Structure
+## Structure (modules)
+
+Modules are activated per engagement in `brain.config.json`; the validator
+only enforces active ones. Core modules are always on.
+
+| Module | Core | Contents |
+|---|---|---|
+| `00-context/` | ✔ | company overview, engagement scope, stakeholders, glossary |
+| `01-meetings/` | ✔ | transcripts (evidence) + minutes (reviewed) + intake template |
+| `02-organization/` | | ways of working, conventions (engineering, git, ticketing, communication), AI policy, ownership, org-level runbooks |
+| `03-projects/` | | one folder per project (`_project-template/` shows the shape) |
+| `04-architecture/` | | systems map, `repos.yaml` (code repo registry), integrations |
+| `05-requirements/` | | functional, non-functional, business rules, open questions |
+| `06-decisions/` | ✔ | `decision-log.md` — immutable `DEC-XXX` register |
+| `07-delivery/` | | status, roadmap, action items, validation matrix, periodic check |
+| `08-vendors/` | | vendor register + evaluations |
+| `09-references/` | ✔ | primary sources (contracts, vendor docs) + **source registers** |
+| `99-inbox/` | ✔ | landing zone for unprocessed material |
+| `memory/` | ✔ | org-level learnings and patterns (quarterly review reports land here) |
+
+## Working with code repos: the workspace model
+
+The brain never contains code and code repos are **never submodules** of the
+brain. The layout is hub-and-spoke with sibling clones:
 
 ```text
-brain/
-├── 00-index.md          # entry point: what to read per task
-├── ai-policy.md         # the org's AI posture (mandatory, never left pending)
-├── glossary.md          # canonical business vocabulary
-├── domain/              # overview, entities, business rules, stakeholders
-├── decisions/           # org-level ADRs (single-repo ADRs stay in that repo)
-├── conventions/         # engineering, git, communication — the cross-cutting part
-├── architecture/        # systems map and external integrations
-├── runbooks/            # executable operational procedures
-└── team/                # ownership: everything has a human owner
-memory/                  # org-level learnings and patterns
-docs/                    # repo adoption and anti-drift maintenance
-.github/skills/          # brain bootstrap and maintenance (harness skill format)
-scripts/ + Makefile      # init, structure/link validation, stats
+~/work/acme/
+├── acme-brain/          ← this repo (the hub)
+├── api-payments/        ← code repo, its CLAUDE.md imports ../acme-brain/…
+└── web-portal/          ← code repo, same
 ```
 
-## Principles
-
-1. **Stale context is worse than missing context** — `_PENDING_` markers are
-   visible debt, not shame; the quarterly review reduces them.
-2. **Everything has a human owner** — no owner in `team/ownership.md`, no entry.
-3. **Selective injection** — agents read `brain/00-index.md` and load only what
-   the task needs; never "the whole brain".
-4. **Nothing sensitive** — no secrets or personal data: agents read this.
+Day 1 for a developer: clone the brain, run `make workspace` — it reads
+`04-architecture/repos.yaml` and clones every registered repo alongside.
+Full rationale, CI variant, and degradation behavior: [`docs/workspace.md`](docs/workspace.md).
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `make init ORG="…"` | Instantiates the template for an organization |
-| `make validate` | Complete structure, healthy links, `_PENDING_` debt report |
-| `make stats` | Content size per section |
+| `make init ORG="…" [PROFILE=…]` | Instantiate for an organization with an engagement profile |
+| `make validate` | Structure (per config), links, duplicate IDs, unsourced decisions, status debt |
+| `make workspace` | Clone all code repos from `repos.yaml` as siblings of this repo |
+| `make stats` | Content stats per active module |
 
-## Maintenance
+## Principles
 
-Anti-drift is a process, not a hope: the `quarterly_context_review` skill every
-~90 days + per-section owners + `make validate` in CI. Details in
-[`docs/maintenance.md`](docs/maintenance.md).
+1. **Evidence ≠ knowledge.** Raw material lands in inbox/meetings/references;
+   only cited, statused content becomes canonical.
+2. **Stale context is worse than missing context** — the quarterly review
+   (skill `quarterly_context_review`) exists to fight drift.
+3. **Everything has a human owner** (`02-organization/ownership.md`).
+4. **Decisions are immutable** — supersede, never edit.
+5. **Nothing sensitive** — agents read this; reference secrets, never store them.

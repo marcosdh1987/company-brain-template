@@ -1,59 +1,57 @@
 ---
 name: bootstrap_company_brain
-description: Use when instantiating this company-brain template for a new organization — guides the interview-and-mine process that fills domain, glossary, conventions, architecture and ownership from real sources (repos, docs, team interviews), replacing every _PENDING_ marker with verified content.
+description: Use when instantiating the company-brain template for an organization — fresh start or migration of an org with existing history. Guides profile selection, source mining, interviews, and initial promotion, replacing _PENDING_ placeholders only with verified, cited content.
 ---
 
 # Skill: bootstrap_company_brain
 
 ## Purpose
 
-Turn an empty clone of `company-brain-template` into a populated, owned company
-brain for one organization. The skill mines existing sources first (repos, docs,
-tickets), then interviews humans only for what mining cannot answer, and never
-invents domain facts.
+Turn a clone of `company-brain-template` into a populated, owned brain for
+one organization. Mine real sources first; interview humans only for what
+mining cannot answer; never invent domain facts.
 
 ## Required Input
 
-- Organization name and the client/team contact who will own the brain.
-- Read access to: the organization's main repos, any existing docs/wiki, and
-  (optional) the AI gateway config if one exists.
-- 60-90 min of interview time with 1-2 senior people (can be async written).
+- Organization name, engagement profile (`consulting` /
+  `delivery-oversight` / `development` / `full`), and the contact who will
+  own the brain.
+- Read access to available sources: repos, docs, contracts, transcripts.
+- 60–90 min of interview time with 1–2 senior people (can be async).
 
 ## Execution Rules
 
-1. **Init.** Run `make init ORG=<name>`. It replaces the org placeholder across
-   the repo, stamps dates, and prints the section checklist. Never skip this.
-2. **Mine before asking.** For each section, extract candidate content from real
-   sources and mark provenance:
-   - `domain/*` and `glossary.md` ← READMEs, models/schemas, API contracts,
-     product docs, recurring terms in issues/PRs.
-   - `architecture/systems-map.md` ← repo list, docker-compose/IaC, CI configs.
-   - `conventions/*` ← observed branch names, PR templates, linter configs,
-     actual merge behavior (what people do, not what they say).
-   - `team/ownership.md` ← CODEOWNERS, top committers per area.
-3. **Interview to close gaps.** Prepare one focused question list per section —
-   only for what mining could not answer or where sources contradict each other.
-   Contradictions are asked explicitly ("docs say X, code does Y — which is
-   true today?").
-4. **Write with the section's own format.** Every file already defines its
-   structure and quality bar in its header note. Respect tables, IDs (BR-NNN),
-   and ADR numbering. Replace `_PENDING_` only with verified content; leave
-   the marker where nothing reliable exists yet — a visible gap beats a
-   plausible invention.
-5. **AI policy is mandatory.** `brain/ai-policy.md` must leave bootstrap with
-   its "approved tools", "data" and "accountability" sections filled
-   and approved by the client contact. This is the one section that cannot stay
-   `_PENDING_`.
-6. **Assign owners.** Every section in `team/ownership.md` gets a named human
-   owner before the bootstrap is declared done. No owner, no section.
-7. **Record the founding ADR.** Complete `decisions/0001-…` with real date and
-   decision-makers.
-8. **Gate.** `make validate` must pass. Then generate the adoption snippet for
-   each target repo (see `docs/adoption.md`) and hand it to the team.
+1. **Init.** `make init ORG=<name> PROFILE=<profile>`. This writes
+   `brain.config.json` and lists inactive modules. Never skip it.
+2. **Choose the mode:**
+   - **Fresh start** — little prior material: go to rule 3.
+   - **Migration (org with history)** — contracts, transcripts, old docs
+     exist: first move *everything* into `99-inbox/` and
+     `09-references/`, create a **source register** from the template
+     (IDs `SRC-XXX`, classification, known conflicts with precedence
+     rules), and only then promote gradually. Evidence is never edited;
+     conflicts are recorded, not resolved by overwriting.
+3. **Mine before asking.** Per section, extract candidates from real
+   sources with provenance: context/glossary ← docs, contracts, recurring
+   terms; conventions ← observed branch names, PR templates, actual merge
+   behavior; systems/repos ← repo list, IaC, CI configs; ownership ←
+   CODEOWNERS, top committers.
+4. **Interview to close gaps** — one focused list per section; ask about
+   contradictions explicitly ("docs say X, code does Y — which is true?").
+5. **Write with each file's own format and statuses.** `_PENDING_` with an
+   owner beats plausible invention. Every promoted fact carries status and
+   source.
+6. **Mandatory before done:** `02-organization/ai-policy.md` filled and
+   approved (when the module is active); every active module's owner named
+   in `ownership.md`; DEC-001 completed with real date and deciders; if the
+   org has code repos, `04-architecture/repos.yaml` populated.
+7. **Gate.** `make validate` green. Hand the team the adoption snippet
+   (`examples/`) and, for development profiles, run `make workspace` once to
+   verify the layout.
 
 ## Output Format
 
-- Populated brain with per-section provenance (source-mined vs interviewed).
-- Remaining `_PENDING_` markers listed with a proposed owner and date each.
-- The adoption snippets for the organization's repos, ready to paste.
-- Suggested next step: `quarterly_context_review` scheduled 90 days out.
+- Populated brain with per-section provenance (mined vs interviewed).
+- Remaining `_PENDING_` items, each with proposed owner and date.
+- For migration mode: the source register with its conflicts table.
+- Next step: schedule `quarterly_context_review` 90 days out.

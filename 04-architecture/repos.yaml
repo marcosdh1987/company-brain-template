@@ -1,0 +1,21 @@
+# Code repo registry — the machine-readable side of the systems map.
+# `make workspace` clones every repo with `workspace: true` as a SIBLING of
+# this brain (hub-and-spoke; see docs/workspace.md). Code repos are never
+# submodules of the brain.
+#
+# harness: which governance release the repo is pinned to (informative).
+org: __ORG_NAME__
+repos: []
+# repos:
+#   - name: api-payments
+#     url: git@github.com:acme/api-payments.git
+#     stack: python
+#     owner: team-core
+#     harness: v0.4.0
+#     workspace: true
+#   - name: web-portal
+#     url: git@github.com:acme/web-portal.git
+#     stack: typescript
+#     owner: team-web
+#     harness: null        # not yet retrofitted
+#     workspace: true
