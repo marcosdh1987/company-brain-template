@@ -1,5 +1,5 @@
 # Vendor register
 
-| Vendor | Service | Contact | Project | Contract status | Dependency / risk | Status |
+| Vendor | Service | Contact | Work unit | Contract status | Dependency / risk | Status |
 |---|---|---|---|---|---|---|
 | _PENDING_ | | | | | | |

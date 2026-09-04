@@ -1,4 +1,4 @@
-# <Project> — execution checklist
+# <Work unit> — execution checklist
 
 | Item | Result | Evidence | Owner | Date |
 |---|---|---|---|---|

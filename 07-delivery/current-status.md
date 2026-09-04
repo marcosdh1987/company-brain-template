@@ -5,9 +5,9 @@
 | Last updated | _PENDING_ |
 | Owner | _PENDING_ |
 
-## By project / area
+## By work unit / area
 
-| Project / area | Status | Summary | Next milestone |
+| Work unit / area | Status | Summary | Next milestone |
 |---|---|---|---|
 | _PENDING_ | | | |
 

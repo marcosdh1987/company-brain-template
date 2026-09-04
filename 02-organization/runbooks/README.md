@@ -1,8 +1,8 @@
 # Runbooks (organization level)
 
 > Step-by-step operational procedures a newcomer — or an agent — can follow.
-> One per file, named after the action. Copy `template.md`. Project-specific
-> procedures go in `03-projects/<project>/` instead.
+> One per file, named after the action. Copy `template.md`. Work-unit-specific
+> procedures go in `03-work/<work-unit>/` instead.
 >
 > Rule: explained twice over chat → becomes a runbook (skill `add_runbook`).
 

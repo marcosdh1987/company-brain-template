@@ -22,7 +22,7 @@ from collections import Counter, defaultdict
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-ALWAYS_REQUIRED = ["README.md", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md",
+ALWAYS_REQUIRED = ["README.md", "START_HERE.md", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md",
                    "Makefile", "brain.config.json",
                    "memory/learnings.md", "memory/patterns.md"]
 
@@ -38,7 +38,7 @@ MODULE_REQUIRED = {
                         "02-organization/conventions/communication.md",
                         "02-organization/runbooks/README.md",
                         "02-organization/runbooks/template.md"],
-    "03-projects": ["03-projects/README.md"],
+    "03-work": ["03-work/README.md"],
     "04-architecture": ["04-architecture/systems-map.md", "04-architecture/repos.yaml",
                         "04-architecture/integrations.md"],
     "05-requirements": ["05-requirements/functional.md", "05-requirements/non-functional.md",
@@ -50,6 +50,7 @@ MODULE_REQUIRED = {
     "08-vendors": ["08-vendors/vendor-register.md"],
     "09-references": ["09-references/README.md", "09-references/source-register-template.md"],
     "99-inbox": ["99-inbox/README.md"],
+    "12-capabilities": ["12-capabilities/README.md", "12-capabilities/capability-register.md"],
 }
 
 STATUSES = ["CONFIRMED", "PENDING VALIDATION", "INFERRED", "SUPERSEDED", "BLOCKED"]
@@ -63,6 +64,33 @@ def md_files():
             yield p
 
 
+def check_version_drift() -> list[str]:
+    """README's `# Company Brain Template — vX.Y` must match CHANGELOG's
+    latest `## [X.Y.Z]` entry (major.minor only — patches don't bump it)."""
+    errs: list[str] = []
+    readme = ROOT / "README.md"
+    changelog = ROOT / "CHANGELOG.md"
+    if not (readme.is_file() and changelog.is_file()):
+        return errs
+    readme_m = re.search(r"^#\s+Company Brain Template\s+—\s+v(\d+\.\d+)",
+                          readme.read_text(encoding="utf-8"), re.M)
+    changelog_m = re.search(r"^##\s+\[(\d+)\.(\d+)\.\d+\]",
+                            changelog.read_text(encoding="utf-8"), re.M)
+    if not readme_m:
+        errs.append("README.md: missing '# Company Brain Template — vX.Y' header")
+        return errs
+    if not changelog_m:
+        errs.append("CHANGELOG.md: missing a '## [X.Y.Z]' entry")
+        return errs
+    changelog_version = f"{changelog_m.group(1)}.{changelog_m.group(2)}"
+    if readme_m.group(1) != changelog_version:
+        errs.append(
+            f"version drift: README.md says v{readme_m.group(1)}, "
+            f"CHANGELOG.md latest entry is {changelog_m.group(1)}.{changelog_m.group(2)}.x"
+        )
+    return errs
+
+
 def main() -> int:
     try:
         cfg = json.loads((ROOT / "brain.config.json").read_text(encoding="utf-8"))
@@ -72,6 +100,7 @@ def main() -> int:
     namespaces = cfg.get("id_namespaces", ["DEC", "SRC", "ACT", "Q", "REQ-FUN", "REQ-NFR", "BR"])
 
     errors: list[str] = []
+    errors += check_version_drift()
 
     required = list(ALWAYS_REQUIRED)
     for mod, files in MODULE_REQUIRED.items():
@@ -100,7 +129,7 @@ def main() -> int:
                 continue
             if not (md.parent / target).resolve().exists():
                 errors.append(f"{rel}: broken link -> {target}")
-        if "template" not in md.name and "_project-template" not in str(rel):
+        if "template" not in md.name and "_templates" not in str(rel) and md.name != "INDEX.md":
             for m in id_def_re.finditer(text):
                 id_defs[m.group(1)].append(str(rel))
 

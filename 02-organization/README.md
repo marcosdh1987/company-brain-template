@@ -13,4 +13,4 @@ How this organization works — the layer code repos and agents consume as
 | `conventions/ticketing.md` | How tickets work HERE — projects, workflow states, definition of ready/done |
 | `conventions/communication.md` | Where each conversation lives |
 | `ownership.md` | Who owns what — systems, brain sections, decisions ("no owner, no entry") |
-| `runbooks/` | Org-level operational procedures (project-specific ones go in `03-projects/<p>/`) |
+| `runbooks/` | Org-level operational procedures (work-unit-specific ones go in `03-work/<wu>/`) |

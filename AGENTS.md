@@ -3,7 +3,9 @@
 This repository is the **company brain** for __ORG_NAME__: the persistent,
 agent-readable knowledge base for the engagement. It stores durable context,
 not application code. This file is the single source of operating rules —
-every tool adapter (`CLAUDE.md`, Copilot, etc.) defers to it.
+every tool adapter (`CLAUDE.md`, Copilot, etc.) defers to it. For "where do I
+look first for this task", see [`START_HERE.md`](START_HERE.md); for "what
+is this template", see [`README.md`](README.md).
 
 ## Source-of-truth priority
 
@@ -14,7 +16,7 @@ documents.
 2. `05-requirements/` — validated requirements and business rules
 3. `00-context/` — company context, scope, glossary
 4. `02-organization/` — ways of working, conventions, AI policy, ownership
-5. `03-projects/` — per-project canonical documents
+5. `03-work/` — per-work-unit canonical documents
 6. `04-architecture/` — systems, repos, integrations
 7. `07-delivery/` — status, roadmap, action items
 8. `01-meetings/minutes/` — reviewed summaries
@@ -47,13 +49,26 @@ beats plausible invention.
 - Separate **current state / target state / consultant recommendation /
   client-approved decision** — never blur these four.
 - Prefer updating the authoritative document over creating a duplicate note.
-- Project-specific content stays in `03-projects/<project>/`; cross-project
-  content in the shared sections.
+- Work-unit-specific content stays in `03-work/<work-unit>/`, tiered by
+  rigor (T0/T1/T2 — see `03-work/README.md`); cross-work-unit content in the
+  shared sections.
+- Match traceability to tier: a T0 exploration does not need the sourcing
+  rigor of a T2 client engagement. Never retrofit — promote the tier instead
+  when the work becomes decision-grade or client-facing.
+- Numbered folders beyond the core set (`10-management/`, `11-ml-governance/`,
+  `12-capabilities/`, `13-security/`, …) are **domain modules**: optional,
+  never assumed active, declared in `brain.config.json`.
+- A **role hub** (`02-organization/hubs/<role>-hub.md`) is a task-oriented
+  context router composed over canonical documents — it is never a new
+  source of truth. It points; it does not restate.
 - Never store credentials, passwords, API keys, MFA seeds, private keys, or
   unnecessary personal data. Reference secret locations, never values.
 - Keep documents concise and actionable.
 
 ## What to read per task
+
+The full routing table lives in [`START_HERE.md`](START_HERE.md) — the
+context router. Summary:
 
 | If the task is… | Read |
 |---|---|
@@ -80,7 +95,7 @@ When processing a transcript, email, or inbox file, extract in this order:
 5. Risks → `07-delivery/current-status.md`
 6. Action items → `07-delivery/action-items.md`
 7. New systems or vendors mentioned → `04-architecture/`, `08-vendors/`
-8. Project impacts → `03-projects/<project>/`
+8. Work-unit impacts → `03-work/<work-unit>/`
 9. Conflicts with current architecture, roadmap, or decisions → flag them
 10. List the canonical files updated (the minutes template has a section for it)
 
