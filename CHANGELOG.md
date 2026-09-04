@@ -3,6 +3,38 @@
 Semver by tags (`vX.Y.Z`). `MINOR` = new sections/templates; `PATCH` = content
 fixes; `MAJOR` = folder restructures that break consumer adapters.
 
+## [2.0.0]
+
+### Changed (BREAKING)
+- Renamed `03-projects/` → `03-work/`. Folders are now **work units**
+  (`type: client | opportunity | internal-product | initiative`, `stage:
+  exploring | active | paused | closed`) instead of an assumed one-shape
+  "project". Existing brains on v1.x must rename the folder and add
+  frontmatter to each unit's `overview.md` — see `03-work/README.md`.
+- Replaced `_project-template/` with tiered templates `_templates/t0/` (light,
+  exploratory), `t1/` (medium), `t2/` (full rigor, the old shape) —
+  "graduated rigor": traceability now matches the tier, not a single fixed
+  bar for every work unit.
+- All cross-references to `03-projects` (AGENTS.md, README.md, skills,
+  validator, docs) updated to `03-work`.
+
+### Added
+- `START_HERE.md` — a context router distinct from `AGENTS.md` (rules) and
+  `README.md` (explanation).
+- `scripts/build_indexes.py` + `make index` — generates `03-work/INDEX.md`,
+  `06-decisions/INDEX.md`, `05-requirements/INDEX.md` from frontmatter/IDs.
+  `make validate` now fails if a committed index is stale.
+- `make validate` now also fails on README/CHANGELOG version drift.
+- Optional `12-capabilities/` module: capability register with maturity
+  states `researched → piloted → proven`.
+- Profiles: `consulting-company` (enables `12-capabilities` by default),
+  `team`, `engineering-management`, `client-engagement`.
+- Documented the "role hub" pattern (`02-organization/hubs/<role>-hub.md`) —
+  a task-oriented context router composed over canonical docs, never a new
+  source of truth.
+- `memory/` is now declared as a core module in `brain.config.json` (fixing
+  drift with the README, which already listed it as core).
+
 ## [1.1.0]
 
 ### Added

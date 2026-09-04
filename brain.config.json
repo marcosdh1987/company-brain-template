@@ -6,14 +6,16 @@
     "00-context": true,
     "01-meetings": true,
     "02-organization": true,
-    "03-projects": true,
+    "03-work": true,
     "04-architecture": true,
     "05-requirements": true,
     "06-decisions": true,
     "07-delivery": true,
     "08-vendors": true,
     "09-references": true,
-    "99-inbox": true
+    "99-inbox": true,
+    "memory": true,
+    "12-capabilities": false
   },
   "id_namespaces": [
     "DEC",

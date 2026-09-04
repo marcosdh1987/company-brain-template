@@ -28,8 +28,8 @@
 ## Systems or vendors mentioned
 <!-- check 04-architecture/ and 08-vendors/ -->
 
-## Project impacts
-<!-- update 03-projects/<project>/ -->
+## Work-unit impacts
+<!-- update 03-work/<work-unit>/ -->
 
 ## Conflicts with current architecture, roadmap, or decisions
 <!-- flag explicitly; never silently overwrite -->

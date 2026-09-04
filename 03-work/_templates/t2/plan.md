@@ -1,4 +1,4 @@
-# <Project> — plan
+# <Work unit> — plan
 
 > Steps from current to target state. Each step: verifiable outcome, owner,
 > dependencies. BLOCKED steps name their prerequisite.

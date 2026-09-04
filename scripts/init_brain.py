@@ -5,10 +5,15 @@ Usage:
     python3 scripts/init_brain.py --org "Acme Inc." [--profile consulting] [--dry-run]
 
 Profiles preselect active modules in brain.config.json:
-  consulting        strategy/oversight work, no code repos yet
-  delivery-oversight validating a vendor's delivery
-  development       the org has code repos we work on
-  full              everything on (default)
+  consulting            strategy/oversight work, no code repos yet
+  delivery-oversight    validating a vendor's delivery
+  development           the org has code repos we work on
+  team                  a single team's internal brain, no client dimension
+  engineering-management  engineering org context: repos, conventions, delivery
+  consulting-company    a consultancy's own brain across clients (capability
+                        register on by default)
+  client-engagement     a single client engagement, full traceability
+  full                  everything on (default)
 
 The script replaces the __ORG_NAME__ placeholder, stamps the founding DEC
 date, writes the config, and lists module folders that can be deleted for the
@@ -26,17 +31,26 @@ PLACEHOLDER = "__ORG_NAME__"
 SKIP_DIRS = {".git", ".venv", "__pycache__", "_to_delete"}
 TEXT_EXT = {".md", ".yml", ".yaml", ".toml", ".txt", ".json"}
 
-PROFILES = {
-    "consulting": {"03-projects": True, "04-architecture": True, "05-requirements": True,
-                   "07-delivery": True, "08-vendors": True, "02-organization": True},
-    "delivery-oversight": {"03-projects": True, "04-architecture": False,
-                           "05-requirements": True, "07-delivery": True,
-                           "08-vendors": True, "02-organization": False},
-    "development": {"03-projects": True, "04-architecture": True, "05-requirements": True,
-                    "07-delivery": True, "08-vendors": False, "02-organization": True},
-    "full": {},
+# Domain modules (beyond the numbered core set) that a profile may switch on.
+# Never assumed active — always declared explicitly per profile, per
+# brain.config.json. Profiles are expressed as differences from a shared
+# baseline so a missing key can't silently slip through unnoticed.
+_BASELINE = {"03-work": True, "04-architecture": True, "05-requirements": True,
+             "07-delivery": True, "08-vendors": True, "02-organization": True,
+             "12-capabilities": False}
+_PROFILE_DIFFS: dict[str, dict[str, bool] | None] = {
+    "consulting": {},
+    "delivery-oversight": {"04-architecture": False, "02-organization": False},
+    "development": {"08-vendors": False},
+    "team": {"05-requirements": False, "08-vendors": False},
+    "engineering-management": {"08-vendors": False},
+    "consulting-company": {"12-capabilities": True},
+    "client-engagement": {},
+    "full": None,  # empty overrides: leave brain.config.json's existing values as-is
 }
-CORE = ["00-context", "01-meetings", "06-decisions", "09-references", "99-inbox"]
+PROFILES = {name: ({**_BASELINE, **diff} if diff is not None else {})
+            for name, diff in _PROFILE_DIFFS.items()}
+CORE = ["00-context", "01-meetings", "06-decisions", "09-references", "99-inbox", "memory"]
 
 
 def main() -> int:

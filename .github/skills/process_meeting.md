@@ -28,8 +28,8 @@ requirement stays trapped in a transcript.
    `05-requirements/` (changes mark the old value `SUPERSEDED`); open
    questions → the right `open-questions.md`; risks →
    `07-delivery/current-status.md`; actions → `ACT-XXX` rows with one named
-   owner and one date; vendors/systems → registers; project impacts →
-   `03-projects/<p>/` (including `change-log.md`).
+   owner and one date; vendors/systems → registers; work-unit impacts →
+   `03-work/<wu>/` (including `change-log.md`).
 4. **Conflicts are findings, not obstacles:** anything that contradicts an
    existing DEC, requirement, or architecture statement gets flagged in the
    minutes' conflicts section and, if source-level, in the source register.

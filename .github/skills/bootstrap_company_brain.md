@@ -14,8 +14,9 @@ mining cannot answer; never invent domain facts.
 ## Required Input
 
 - Organization name, engagement profile (`consulting` /
-  `delivery-oversight` / `development` / `full`), and the contact who will
-  own the brain.
+  `delivery-oversight` / `development` / `team` / `engineering-management` /
+  `consulting-company` / `client-engagement` / `full`), and the contact who
+  will own the brain.
 - Read access to available sources: repos, docs, contracts, transcripts.
 - 60–90 min of interview time with 1–2 senior people (can be async).
 

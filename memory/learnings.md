@@ -1,6 +1,6 @@
 # Learnings (engagement level)
 
-> Durable lessons that transcend a single project, plus the dated reports of
+> Durable lessons that transcend a single work unit, plus the dated reports of
 > each `quarterly_context_review`. Single-repo learnings go in that repo's
 > `memory/`.
 

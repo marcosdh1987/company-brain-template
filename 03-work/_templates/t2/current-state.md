@@ -1,4 +1,4 @@
-# <Project> — current state
+# <Work unit> — current state
 
 > What exists TODAY, observed and cited. Not what should exist. Every
 > non-obvious claim carries a status and a source.
