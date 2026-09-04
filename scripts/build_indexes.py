@@ -83,12 +83,15 @@ def build_decisions_index() -> str | None:
     if not log.is_file():
         return None
     text = log.read_text(encoding="utf-8")
-    blocks = re.split(r"^## (?=DEC-\d+)", text, flags=re.M)[1:]
+    blocks = re.split(r"^## (?=DEC-\d+(?!\w))", text, flags=re.M)[1:]
     rows = []
     for b in blocks:
         header = b.splitlines()[0].strip()
-        ident_m = re.match(r"(DEC-\d+)\s*—\s*(.*)", header)
+        ident_m = re.match(r"(DEC-\d+(?!\w))\s*[-—]\s*(.*)", header)
         if not ident_m:
+            print(f"WARNING: build_indexes: could not parse decision header "
+                  f"{header!r} in 06-decisions/decision-log.md — omitted from INDEX.md",
+                  file=sys.stderr)
             continue
         ident, title = ident_m.group(1), ident_m.group(2)
         status_m = re.search(r"\*\*Status\*\*\s*\|\s*([^|]+)\|", b)

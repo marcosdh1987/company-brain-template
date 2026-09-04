@@ -72,7 +72,7 @@ def check_version_drift() -> list[str]:
     changelog = ROOT / "CHANGELOG.md"
     if not (readme.is_file() and changelog.is_file()):
         return errs
-    readme_m = re.search(r"^#\s+Company Brain Template\s+—\s+v(\d+\.\d+)",
+    readme_m = re.search(r"^#\s+Company Brain Template\s+[-—]\s+v(\d+\.\d+)",
                           readme.read_text(encoding="utf-8"), re.M)
     changelog_m = re.search(r"^##\s+\[(\d+)\.(\d+)\.\d+\]",
                             changelog.read_text(encoding="utf-8"), re.M)

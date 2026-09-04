@@ -33,35 +33,23 @@ TEXT_EXT = {".md", ".yml", ".yaml", ".toml", ".txt", ".json"}
 
 # Domain modules (beyond the numbered core set) that a profile may switch on.
 # Never assumed active — always declared explicitly per profile, per
-# brain.config.json.
-PROFILES = {
-    "consulting": {"03-work": True, "04-architecture": True, "05-requirements": True,
-                   "07-delivery": True, "08-vendors": True, "02-organization": True,
-                   "12-capabilities": False},
-    "delivery-oversight": {"03-work": True, "04-architecture": False,
-                           "05-requirements": True, "07-delivery": True,
-                           "08-vendors": True, "02-organization": False,
-                           "12-capabilities": False},
-    "development": {"03-work": True, "04-architecture": True, "05-requirements": True,
-                    "07-delivery": True, "08-vendors": False, "02-organization": True,
-                    "12-capabilities": False},
-    "team": {"03-work": True, "04-architecture": True, "05-requirements": False,
-             "07-delivery": True, "08-vendors": False, "02-organization": True,
-             "12-capabilities": False},
-    "engineering-management": {"03-work": True, "04-architecture": True,
-                               "05-requirements": True, "07-delivery": True,
-                               "08-vendors": False, "02-organization": True,
-                               "12-capabilities": False},
-    "consulting-company": {"03-work": True, "04-architecture": True,
-                           "05-requirements": True, "07-delivery": True,
-                           "08-vendors": True, "02-organization": True,
-                           "12-capabilities": True},
-    "client-engagement": {"03-work": True, "04-architecture": True,
-                          "05-requirements": True, "07-delivery": True,
-                          "08-vendors": True, "02-organization": True,
-                          "12-capabilities": False},
-    "full": {},
+# brain.config.json. Profiles are expressed as differences from a shared
+# baseline so a missing key can't silently slip through unnoticed.
+_BASELINE = {"03-work": True, "04-architecture": True, "05-requirements": True,
+             "07-delivery": True, "08-vendors": True, "02-organization": True,
+             "12-capabilities": False}
+_PROFILE_DIFFS: dict[str, dict[str, bool] | None] = {
+    "consulting": {},
+    "delivery-oversight": {"04-architecture": False, "02-organization": False},
+    "development": {"08-vendors": False},
+    "team": {"05-requirements": False, "08-vendors": False},
+    "engineering-management": {"08-vendors": False},
+    "consulting-company": {"12-capabilities": True},
+    "client-engagement": {},
+    "full": None,  # empty overrides: leave brain.config.json's existing values as-is
 }
+PROFILES = {name: ({**_BASELINE, **diff} if diff is not None else {})
+            for name, diff in _PROFILE_DIFFS.items()}
 CORE = ["00-context", "01-meetings", "06-decisions", "09-references", "99-inbox", "memory"]
 
 
