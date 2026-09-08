@@ -1,4 +1,4 @@
-# Company Brain Template — v2.0
+# Company Brain Template — v2.1
 
 Template for instantiating a **company brain**: the persistent, agent-readable
 knowledge base for an engagement with one organization — its context,
@@ -111,7 +111,9 @@ Full rationale, CI variant, and degradation behavior: [`docs/workspace.md`](docs
 | `make index` | Regenerate `03-work/INDEX.md` (and other module indexes) from frontmatter |
 | `make workspace` | Clone all code repos from `repos.yaml` as siblings of this repo |
 | `make stats` | Content stats per active module |
-| `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` projections |
+| `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` `.opencode/` projections |
+| `make opencode` | Launch the OpenCode TUI with `.env` loaded (falls back to the harness `.env`) |
+| `make opencode-doctor` | Check the opencode install, which `.env` was loaded, and endpoint reachability |
 
 ## Skills and multi-tool discovery
 
@@ -119,8 +121,29 @@ The brain ships its 6 lifecycle skills and **syncs working skills**
 (brainstorming, planning, research, writing, retrospectives) from the
 engineering harness — declared in `brain.config.json`, locked in
 `skills-lock.json`. `make sync-skills` also regenerates native projections so
-**Claude Code/app, Codex, and Antigravity** all discover every skill. Details:
-[`docs/skills.md`](docs/skills.md).
+**Claude Code/app, Codex, Antigravity, and OpenCode** all discover every skill.
+
+An internal skill is either a flat `.github/skills/<name>.md` or a
+`.github/skills/<name>/SKILL.md` folder that bundles the scripts, templates or
+references it runs — executable bits survive the projection, so a skill can
+ship the tool it calls. Details: [`docs/skills.md`](docs/skills.md).
+
+## Running the brain with OpenCode
+
+The brain is a working repository, so it gets a runtime of its own: OpenCode,
+pointed at the AI Gateway (LiteLLM), at LAN servers (Ollama / LM Studio), or at
+cloud models — the same `.env` variable contract as the engineering harness, so
+one `.env` serves both repos.
+
+```bash
+cp .env.example .env     # models, gateway URL/token, LAN endpoints
+make opencode-doctor     # install, which .env loaded, endpoint reachability
+make opencode            # launch the TUI
+```
+
+`opencode.json` maps the providers; `OPENCODE.md` is the adapter that points
+OpenCode at `AGENTS.md` and carries the generated skill list. On a small
+self-hosted model, `LOCAL_AGENT.md` keeps it from losing the task.
 
 ## Principles
 

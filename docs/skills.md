@@ -8,6 +8,20 @@ working harness, without duplicating the engineering one. Three layers:
 Bootstrap, meeting processing, decisions, runbooks, domain updates, quarterly
 review. Source of truth: this template; they evolve with its releases.
 
+An internal skill takes either of two shapes:
+
+| The skill is… | It goes in |
+|---|---|
+| A single `.md`, no helper files | `.github/skills/<name>.md` |
+| Prose plus scripts, templates or references | `.github/skills/<name>/SKILL.md` with the helpers beside it |
+
+The folder shape is what lets a skill ship the thing it runs — a shell script,
+a query template, a reference document — instead of describing it in prose and
+hoping the agent reconstructs it. A folder without `SKILL.md` is not a skill:
+`make sync-skills` reports it and skips it. Executable bits survive the
+projection, so a bundled `.sh` stays runnable in every tool's view. Full
+authoring procedure: [`.github/skills/README.md`](../.github/skills/README.md).
+
 ## 2. External working skills (`.github/skills-external/`)
 
 Non-code skills synced from the engineering harness (`ml-python-base`) —
@@ -40,11 +54,14 @@ regenerates:
 | Claude Code / Claude app | `.claude/skills/<name>/SKILL.md` |
 | Codex | `.codex/skills/<name>/SKILL.md` (+ reads `AGENTS.md` natively) |
 | Antigravity | `.agents/skills/<name>/SKILL.md` + `.agents/rules/brain-rules.md` → AGENTS.md |
+| OpenCode | `.opencode/skills/<name>/SKILL.md` + the generated block in `OPENCODE.md` |
 
 Each projection carries `.generated-manifest.tsv`. Never edit projections by
 hand — edit the source (internal file or the harness) and resync. Commit the
 projections so teammates and the Claude desktop app get discovery without
-running anything.
+running anything. `OPENCODE.md` is not a projection but it does carry a
+generated section: the sync rewrites the skill list between its
+`BEGIN/END GENERATED SKILLS` sentinels, so keep those two comments in place.
 
 ## Adding an external skill
 
@@ -53,3 +70,17 @@ running anything.
    `.github/skills/` (flat), and `.claude/skills/`.
 3. Commit: `.github/skills-external/`, `skills-lock.json`, and the three
    projections.
+
+## Adding an internal skill
+
+1. Choose the shape: a flat `<name>.md` for prose only, a `<name>/SKILL.md`
+   folder when the skill ships scripts, templates or references.
+2. Write the YAML frontmatter (`name`, `description`). The `description` is the
+   trigger text an agent reads to decide, and it is what lands in the generated
+   block of `OPENCODE.md`.
+3. `make sync-skills`, then `make validate`.
+4. Commit: the source under `.github/skills/`, the four projections, and
+   `OPENCODE.md`.
+
+Step-by-step version, including the relative-link and governed-path rules:
+[`.github/skills/README.md`](../.github/skills/README.md).

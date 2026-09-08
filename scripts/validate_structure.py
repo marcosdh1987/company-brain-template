@@ -22,8 +22,9 @@ from collections import Counter, defaultdict
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-ALWAYS_REQUIRED = ["README.md", "START_HERE.md", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md",
-                   "Makefile", "brain.config.json",
+ALWAYS_REQUIRED = ["README.md", "START_HERE.md", "AGENTS.md", "CLAUDE.md",
+                   "OPENCODE.md", "CHANGELOG.md", "Makefile", "brain.config.json",
+                   "opencode.json",
                    "memory/learnings.md", "memory/patterns.md"]
 
 MODULE_REQUIRED = {

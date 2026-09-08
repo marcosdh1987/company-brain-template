@@ -12,6 +12,12 @@ code repo's `CLAUDE.md`/`AGENTS.md`, add the block from
 `examples/repo-claude-md-snippet.md`. Claude Code resolves `@path` imports;
 for Codex/OpenCode/Copilot the same block works as a reading instruction.
 
+Working *inside* the brain, OpenCode is a first-class runtime rather than just
+a reader: `OPENCODE.md` is its adapter and `opencode.json` maps the providers.
+It uses the same `.env` variable contract as the engineering harness, so a
+single `.env` — this repo's, or the harness's, which `make opencode` falls back
+to — drives both. Check it with `make opencode-doctor`.
+
 ## Option B — CI / remote reference
 
 Where a sibling clone is impossible (CI pipelines, cloud agents): check out

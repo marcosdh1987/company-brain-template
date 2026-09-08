@@ -106,9 +106,11 @@ for traceability, but its extraction is done.
 
 Two kinds, one discovery surface:
 
-- **Internal (lifecycle)** — source of truth `.github/skills/*.md`: bootstrap,
+- **Internal (lifecycle)** — source of truth `.github/skills/`: bootstrap,
   process_meeting, record_decision, add_runbook, update_domain_context,
-  quarterly_context_review. Distributed with this template's releases.
+  quarterly_context_review. Distributed with this template's releases. Each one
+  is either a flat `<name>.md` or a `<name>/SKILL.md` folder bundling the
+  scripts, templates or references it runs.
 - **External (working skills)** — synced from the engineering harness into
   `.github/skills-external/` per the `harness` section of `brain.config.json`
   (default set: brainstorming, brainstorm_quick, writing-plans,
@@ -117,8 +119,9 @@ Two kinds, one discovery surface:
 
 `make sync-skills` refreshes the external set (lockfile: `skills-lock.json`)
 and regenerates the native projections `.claude/skills/`, `.codex/skills/`,
-`.agents/skills/` so Claude Code, Codex, and Antigravity discover every skill.
-Projections are generated — never edit them by hand.
+`.agents/skills/`, `.opencode/skills/` so Claude Code, Codex, Antigravity and
+OpenCode discover every skill. It also rewrites the generated skill list in
+`OPENCODE.md`. Projections are generated — never edit them by hand.
 
 ## Exit gate
 

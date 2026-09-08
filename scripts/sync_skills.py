@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Sync external skills from the engineering harness and regenerate native
-tool projections so Claude Code, Codex, and Antigravity discover every skill.
+tool projections so Claude Code, Codex, Antigravity, and OpenCode discover every
+skill.
 
 Config (brain.config.json):
     "harness": {
@@ -13,10 +14,14 @@ What it does:
      flat `.github/skills/<name>.md` or dir `.github/skills-external/<name>/`
      — into this repo's `.github/skills-external/<name>/SKILL.md`, recording
      a sha256 per skill in `skills-lock.json`.
-  2. Regenerates `.claude/skills/`, `.codex/skills/`, `.agents/skills/` from
-     internal skills (`.github/skills/*.md`) + synced external dirs. Each
-     projection carries a `.generated-manifest.tsv`; do not edit by hand.
+  2. Regenerates `.claude/skills/`, `.codex/skills/`, `.agents/skills/`,
+     `.opencode/skills/` from internal skills (`.github/skills/`, either a flat
+     `<name>.md` or a `<name>/SKILL.md` folder with its helper files) plus the
+     synced external dirs. Each projection carries a `.generated-manifest.tsv`;
+     do not edit by hand.
   3. Ensures `.agents/rules/brain-rules.md` points Antigravity at AGENTS.md.
+  4. Rewrites the generated skills block in `OPENCODE.md` (between the
+     BEGIN/END GENERATED SKILLS sentinels) with the projected skill list.
 
 Idempotent. Run after every harness release adoption.
 """
@@ -36,7 +41,10 @@ INTERNAL = ROOT / ".github" / "skills"
 LOCK = ROOT / "skills-lock.json"
 PROJECTIONS = [ROOT / ".claude" / "skills",
                ROOT / ".codex" / "skills",
-               ROOT / ".agents" / "skills"]
+               ROOT / ".agents" / "skills",
+               ROOT / ".opencode" / "skills"]
+OPENCODE_MD = ROOT / "OPENCODE.md"
+SKILLS_BLOCK = re.compile(r"(<!-- BEGIN GENERATED SKILLS[^\n]*-->\n).*?(<!-- END GENERATED SKILLS -->)", re.S)
 
 
 def sha256(path: pathlib.Path) -> str:
@@ -76,9 +84,32 @@ def install_external(src: pathlib.Path, name: str) -> pathlib.Path:
 
 
 def internal_skills():
+    """Internal skills in either supported shape, sorted by name.
+
+    Two shapes are accepted under `.github/skills/`:
+      - a flat `<name>.md` — a skill that is only prose;
+      - a `<name>/` directory with `SKILL.md` as its entry point, bundling the
+        scripts, templates or references the skill runs.
+
+    A directory without SKILL.md is not a skill: it is reported and skipped
+    rather than silently ignored, because the author would otherwise only find
+    out when the skill never triggers.
+    """
     if not INTERNAL.is_dir():
         return []
-    return [p for p in sorted(INTERNAL.glob("*.md")) if p.name != "README.md"]
+    found = []
+    for p in sorted(INTERNAL.iterdir(), key=lambda p: p.name):
+        if p.name.startswith("."):
+            continue
+        if p.is_dir():
+            if (p / "SKILL.md").is_file():
+                found.append(p)
+            else:
+                print(f"WARNING: {p.relative_to(ROOT)}/ has no SKILL.md and was IGNORED.")
+                print(f"         A folder skill needs {p.name}/SKILL.md as its entry point.")
+        elif p.suffix == ".md" and p.name != "README.md":
+            found.append(p)
+    return found
 
 
 def regenerate_projections():
@@ -121,6 +152,42 @@ def ensure_antigravity_rules():
             encoding="utf-8")
 
 
+def skill_description(src: pathlib.Path) -> str:
+    """Read `description:` from a skill's YAML frontmatter (single-line only)."""
+    md = src / "SKILL.md" if src.is_dir() else src
+    text = md.read_text(encoding="utf-8") if md.is_file() else ""
+    m = re.match(r"---\n(.*?)\n---", text, re.S)
+    if not m:
+        return ""
+    d = re.search(r"^description:\s*(.+)$", m.group(1), re.M)
+    return d.group(1).strip().strip("\"'") if d else ""
+
+
+def render_opencode_skills_block(entries):
+    """Rewrite the sentinel-delimited skills list in OPENCODE.md."""
+    if not OPENCODE_MD.is_file():
+        return
+    lines = ["The governed skills below are projected into `.opencode/skills/`. "
+             "Internal skills are the source of truth and take precedence over "
+             "external synced skills on name conflicts.", ""]
+    for kind, title in (("internal", "Internal skills"), ("external", "External synced skills")):
+        rows = [(n, skill_description(s)) for n, k, s in entries if k == kind]
+        if not rows:
+            continue
+        lines.append(f"**{title}:**")
+        lines.append("")
+        lines += [f"- `{n}`" + (f" — {d}" if d else "") for n, d in rows]
+        lines.append("")
+    lines.append("Refresh this layout with `make sync-skills`.")
+    body = "\n".join(lines) + "\n"
+    text = OPENCODE_MD.read_text(encoding="utf-8")
+    new, n = SKILLS_BLOCK.subn(lambda m: m.group(1) + body + m.group(2), text, count=1)
+    if n == 0:
+        print("WARNING: OPENCODE.md has no GENERATED SKILLS sentinels; block not written")
+    elif new != text:
+        OPENCODE_MD.write_text(new, encoding="utf-8")
+
+
 def main() -> int:
     cfg = json.loads(CFG.read_text(encoding="utf-8")) if CFG.is_file() else {}
     harness_cfg = cfg.get("harness", {})
@@ -148,7 +215,8 @@ def main() -> int:
 
     entries = regenerate_projections()
     ensure_antigravity_rules()
-    print(f"[proj] {len(entries)} skills projected to .claude/ .codex/ .agents/")
+    render_opencode_skills_block(entries)
+    print(f"[proj] {len(entries)} skills projected to .claude/ .codex/ .agents/ .opencode/")
     if missing:
         print(f"WARNING: not found in harness: {', '.join(missing)}")
         return 1

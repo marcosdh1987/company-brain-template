@@ -3,6 +3,26 @@
 Semver by tags (`vX.Y.Z`). `MINOR` = new sections/templates; `PATCH` = content
 fixes; `MAJOR` = folder restructures that break consumer adapters.
 
+## [2.1.0]
+
+### Added
+- OpenCode runtime: `make opencode` / `make opencode-doctor`, `opencode.json`
+  (providers `gateway` / `nvidia` / `ollama` / `lmstudio`, all env-driven),
+  `.env.example`, the `OPENCODE.md` adapter with a generated skill block,
+  `LOCAL_AGENT.md` for small self-hosted models, and the
+  `.opencode/plugin/validate-gate.ts` plugin that runs `make validate` when a
+  session goes idle. The `.env` variable contract matches `ml-python-base`, and
+  `make opencode` falls back to the harness `.env`, so one file serves both
+  repos. `OPENCODE.md` + `opencode.json` are now required by `make validate`.
+- Internal skills can be folders: `.github/skills/<name>/SKILL.md` with the
+  scripts, templates or references the skill runs beside it — the flat
+  `<name>.md` shape still works. Executable bits survive the projection. A
+  folder without `SKILL.md` is reported and skipped, never silently ignored.
+- Fourth native projection `.opencode/skills/`, so OpenCode discovers every
+  skill alongside Claude Code, Codex and Antigravity. `make sync-skills` also
+  rewrites the skill list between the `GENERATED SKILLS` sentinels in
+  `OPENCODE.md`.
+
 ## [2.0.0]
 
 ### Changed (BREAKING)
