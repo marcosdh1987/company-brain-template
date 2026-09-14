@@ -10,8 +10,27 @@ Each skill exposes a `SKILL.md` with purpose, required input, output format, and
 execution rules. When a task matches a skill, read its `SKILL.md` before acting.
 
 <!-- BEGIN GENERATED SKILLS (managed by scripts/sync_skills.py; do not edit) -->
-_Not generated yet — run `make sync-skills` to fill this block with the skills
-projected into `.opencode/skills/`._
+The governed skills below are projected into `.opencode/skills/`. Internal skills are the source of truth and take precedence over external synced skills on name conflicts.
+
+**Internal skills:**
+
+- `add_runbook` — Use when a procedure was explained ad-hoc for the second time — converts it into a runbook with verification and rollback. Org-level procedures go to 02-organization/runbooks/, work-unit-specific ones to the work unit folder.
+- `bootstrap_company_brain` — Use when instantiating the company-brain template for an organization — fresh start or migration of an org with existing history. Guides profile selection, source mining, interviews, and initial promotion, replacing _PENDING_ placeholders only with verified, cited content.
+- `process_meeting` — Use after a meeting — takes a transcript or raw notes from 01-meetings/transcripts/ or 99-inbox/ and produces reviewed minutes plus fully promoted knowledge (decisions, requirements, questions, risks, actions), leaving the source marked processed.
+- `quarterly_context_review` — Use every ~90 days (or after major changes) to fight drift — audits canonical content against reality, marks SUPERSEDED/PENDING VALIDATION where the world moved, measures debt, and reports brain health to the owners.
+- `record_decision` — Use when a decision was made (or proposed) that affects the engagement — records it as an immutable DEC entry in the decision log with mandatory source, handling supersession and status correctly.
+- `update_domain_context` — Use when the business changed — entity, rule, integration, vocabulary or scope — and the brain must absorb it without drifting - locates every affected section, updates them consistently with status and source.
+
+**External synced skills:**
+
+- `brainstorm_quick` — Use for fast ideation on a scoped feature when no written spec or formal approval is needed — diverge on options, weigh trade-offs, converge on a recommendation, then hand off to `plan_and_execute_feature`. For new features or design-impacting work that needs a written, user-approved spec, use the external `brainstorming` skill (full design gate) instead.
+- `brainstorming` — You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.
+- `research_current_info` — Use when the user asks for up-to-date or current information, to confirm something is still accurate, or when a task depends on facts that may have changed since training (library versions, APIs, pricing, releases, news, current best practices). Runs a governed web search with a curated domain allow/deny policy and cited, recency-checked results.
+- `retrospective` — Use at the end of a unit of work to capture durable, non-obvious knowledge into project memory (memory/) and flag decisions worth an ADR. Turns one-off discoveries into compounding, persistent context.
+- `writing-clearly-and-concisely` — Apply Strunk's timeless writing rules to ANY prose humans will read—documentation, commit messages, error messages, explanations, reports, or UI text. Makes your writing clearer, stronger, and more professional.
+- `writing-plans` — Use when you have a spec or requirements for a multi-step task, before touching code
+
+Refresh this layout with `make sync-skills`.
 <!-- END GENERATED SKILLS -->
 
 ## Runtime rules (brain-specific, not a second rule set)

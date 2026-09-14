@@ -1,0 +1,29 @@
+{
+  "source": "../ml-python-base",
+  "skills": {
+    "brainstorming": {
+      "origin": ".github/skills-external/brainstorming",
+      "sha256": "a98ec9476a15096c446b1b5a215dd0461be7d3a65c9df3d1913f87faecf39121"
+    },
+    "brainstorm_quick": {
+      "origin": ".github/skills/brainstorm_quick.md",
+      "sha256": "6cf68195b67500736fa56bca65612cccd57981dffe4e597b49f75cf72a7e77be"
+    },
+    "writing-plans": {
+      "origin": ".github/skills-external/writing-plans",
+      "sha256": "56e8a32ad40c7d4fba11bcb39ea8db1ff40e5f5c5122d5f5a6f85eb6a7721de6"
+    },
+    "writing-clearly-and-concisely": {
+      "origin": ".github/skills-external/writing-clearly-and-concisely",
+      "sha256": "1cdc2182b14aaf7abdcf7bf0da32de9ace14c70a36b2ae2cb1ec8dd49760d9e0"
+    },
+    "research_current_info": {
+      "origin": ".github/skills/research_current_info.md",
+      "sha256": "430eeefacff90253392eb52acd4204d50dde859637f8ae5b2028be06697a98a5"
+    },
+    "retrospective": {
+      "origin": ".github/skills/retrospective.md",
+      "sha256": "95dcefc2569c5ce9654c67d0fb16f08c91930a4bf06294a77a8ae4858243c5a0"
+    }
+  }
+}
