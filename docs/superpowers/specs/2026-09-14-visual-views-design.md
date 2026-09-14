@@ -63,36 +63,47 @@ maps/
   architecture-capabilities.canvas# starter (profile: development, engineering-management, consulting-company)
 ```
 
-- Toggled via `brain.config.json.modules.maps` (boolean), default `false`.
-- `home.canvas` + `README.md` are the only files always present once the
-  module is on. The other four are starter views: copied in at `make init`
-  time only if the resolved profile lists them.
-- `home.canvas` is a launcher, not a map of everything: one card per major
-  section (Context, Work, Decisions, People, Delivery, Capabilities,
-  Architecture, Meetings, Inbox), each a real Obsidian **file node**
-  pointing at that section's hub/README/overview — not a group containing
-  an internal file node, and not a plain text card. Sections whose module
-  is inactive are omitted from the generated `home.canvas`, not shown
-  disabled.
-- Starter Canvas templates live at `scripts/_templates/maps/*.canvas` —
-  plain JSON, edited like any other template. `init_brain.py` renders
-  `home.canvas` by filtering a fixed card list against active modules;
-  the other four are copied byte-for-byte (no templating).
+- Toggled via `brain.config.json.modules.maps` (boolean), default `false`
+  in `_BASELINE`, following the exact same pattern as `12-capabilities`:
+  the `maps/` folder and all five `.canvas` files ship physically in the
+  template repo at all times; the config flag only controls whether
+  `validate_structure.py` requires/checks it, and whether `make init`'s
+  existing "inactive modules (folders may be deleted)" report lists it.
+  There is no per-profile file generation or filtering — this keeps
+  `init_brain.py` unchanged beyond adding the new module keys.
+- `home.canvas` is a launcher, not a map of everything: one file node per
+  major section (Context, Work, Decisions, People, Delivery,
+  Capabilities, Architecture, Meetings, Inbox), each pointing at that
+  section's real hub/README/overview file — not a group containing an
+  internal file node, and not a plain text card. All nine cards are
+  present in every brain; a card pointing at a module the profile left
+  inactive is harmless (the target file still exists on disk, same as
+  every other optional-module file) and can be deleted by hand exactly
+  like any other unwanted module content.
+- The other four Canvas files (`brain-overview`, `portfolio`,
+  `management`, `architecture-capabilities`) are starter views shipped
+  the same way — present in every brain, documented in `maps/README.md`
+  as "most useful for these profiles", deletable by hand. No code reads
+  or writes them based on profile.
 
 ### 2. Canvas lifecycle — the "never silently overwrite" rule
 
 Canvas becomes user-owned the moment it exists. Automation touches a
 `.canvas` file only:
-- at `make init` (first copy into a fresh brain), and only if the target
-  path doesn't already exist — re-running `make init` skips existing
-  Canvas files and logs `"maps/x.canvas already exists, skipped"`;
+- at template checkout (the five starter `.canvas` files ship in git,
+  same as every other module's starter content) — `make init`'s
+  placeholder-replacement pass only rewrites files whose extension is in
+  `TEXT_EXT` (`.md .yml .yaml .toml .txt .json`), which does **not**
+  include `.canvas`, so `init` never opens or rewrites a Canvas file, by
+  construction, not by a special case that could bit-rot;
 - via a new `make new-view NAME=<slug>` target, which copies
   `scripts/_templates/maps/_blank.canvas` to `maps/<slug>.canvas`, refusing
   if the target exists.
 
-`make validate` and `make index` never write to `maps/`. This is enforced
-by construction (neither script touches the `maps/` path) and stated
-explicitly in `AGENTS.md`.
+`make validate` and `make index` never write to `maps/` — neither script
+opens a file for writing outside its own generated-index targets. Stated
+explicitly in `AGENTS.md` as an architectural rule, not just an
+implementation detail.
 
 ### 3. Shared vs personal views
 
@@ -152,12 +163,12 @@ exist, it doesn't require every person to appear on the canvas.
 
 ### 5. Profile wiring (`scripts/init_brain.py`)
 
-Extend `_PROFILE_DIFFS` so each profile also sets `maps` and
-`14-people` module flags, and add a parallel `_PROFILE_VIEWS` mapping
-(profile -> list of starter view basenames beyond `home`) consulted only
-when `maps` is active for that profile:
+Add `"maps": False, "14-people": False` to `_BASELINE`, then extend
+`_PROFILE_DIFFS` to flip them on per profile (no new file-copying logic —
+see above, the files always exist on disk; the flag only governs
+validation and the existing "inactive modules" report):
 
-| Profile | `maps` | `14-people` | Starter views beyond `home` |
+| Profile | `maps` | `14-people` | Starter views most relevant (documented in `maps/README.md`, not enforced) |
 |---|---|---|---|
 | `full` | on | off | brain-overview |
 | `consulting` | on | off | portfolio |
