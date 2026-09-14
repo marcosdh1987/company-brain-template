@@ -49,6 +49,11 @@ Out of scope (deliberately not built): Obsidian plugins, a Canvas
 generator that derives layout from live content, a people/org database,
 enforced `.obsidian/` config bundle beyond what's already gitignored.
 
+Reviewed and left unchanged: `02-organization/hubs/*.md`. These already
+compose canonical docs with a working "hub -> real document" next click
+(Part 11 of the request asked to fix only clearly deficient hubs) —
+none were found deficient, so no edits are included in this plan.
+
 ## Components
 
 ### 1. `maps/` module
