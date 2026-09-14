@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"ac-title","type":"text","x":-40,"y":-160,"width":900,"height":90,"text":"# Architecture & Capabilities\n\nStarter view for engineering-shaped brains: what systems exist, and what the org can actually ship, by maturity."},
+		{"id":"ac-systems","type":"file","file":"04-architecture/systems-map.md","x":0,"y":0,"width":260,"height":100},
+		{"id":"ac-repos","type":"file","file":"04-architecture/repos.yaml","x":300,"y":0,"width":260,"height":100},
+		{"id":"ac-integrations","type":"file","file":"04-architecture/integrations.md","x":600,"y":0,"width":260,"height":100},
+		{"id":"ac-capabilities","type":"file","file":"12-capabilities/README.md","x":0,"y":140,"width":260,"height":100},
+		{"id":"ac-register","type":"file","file":"12-capabilities/capability-register.md","x":300,"y":140,"width":260,"height":100}
+	],
+	"edges":[]
+}

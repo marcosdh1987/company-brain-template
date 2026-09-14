@@ -5,6 +5,14 @@ This file is the **context router**. It does not contain rules (that's
 [`README.md`](README.md)) — it tells you, in one look, where to go for a
 given task. Load only the sections the active task needs.
 
+## Human / visual vs. agent / developer
+
+- **Human / visual:** open this repo as an Obsidian vault, then
+  [`maps/home.canvas`](maps/home.canvas) — a clickable launcher into the
+  same Markdown below. See [`docs/obsidian.md`](docs/obsidian.md).
+- **Agent / developer:** keep reading — [`AGENTS.md`](AGENTS.md) and this
+  file's task table are the entry point either way.
+
 ## By task
 
 | If the task is… | Read |

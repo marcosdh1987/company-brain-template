@@ -3,6 +3,32 @@
 Semver by tags (`vX.Y.Z`). `MINOR` = new sections/templates; `PATCH` = content
 fixes; `MAJOR` = folder restructures that break consumer adapters.
 
+## [2.2.0]
+
+### Added
+- Optional visual views layer `maps/` (Obsidian Canvas): `home.canvas`
+  launcher plus four starter views (`brain-overview`, `portfolio`,
+  `management`, `architecture-capabilities`), `maps/README.md`, and
+  `maps/_templates/blank.canvas` for `make new-view NAME=<slug>`. Canvas
+  files are shipped statically and never regenerated — `make
+  validate`/`make index` never write to `maps/`, and `make init`'s
+  placeholder replacement skips `.canvas` files by construction (not in
+  `TEXT_EXT`). `validate_structure.py` checks Canvas JSON validity and
+  that every file-node path resolves — never layout, color, or "which
+  entities should appear." `maps/*.local.canvas` is gitignored for
+  personal, unshared views.
+- Optional `14-people/` module: minimal `person`/`team` frontmatter
+  templates for navigation and org context — explicitly not an HRIS.
+  `14-people/README.md` states the allowed field list (role, team,
+  project, assignment) and the disallowed one (compensation, health,
+  disciplinary records, private feedback) as a hard boundary.
+- New profile-derived module flags: `maps` on by default for every
+  profile, `14-people` on for `team`, `engineering-management`,
+  `consulting-company`.
+- `docs/obsidian.md` and a short human/agent split in `START_HERE.md`
+  and `README.md` — same knowledge, two navigation interfaces (Obsidian
+  vs. Git and agents).
+
 ## [2.1.0]
 
 ### Added

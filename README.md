@@ -1,4 +1,4 @@
-# Company Brain Template — v2.1
+# Company Brain Template — v2.2
 
 Template for instantiating a **company brain**: the persistent, agent-readable
 knowledge base for an engagement with one organization — its context,
@@ -16,6 +16,13 @@ Three files, three purposes — read them in this order:
   for a given task.
 - **[`AGENTS.md`](AGENTS.md)** — the operating rules.
 - **`README.md`** (this file) — what the template is and how it fits together.
+
+Company Brain provides one shared knowledge layer with multiple
+interfaces: [Obsidian](docs/obsidian.md) (Canvas, Graph, backlinks) for
+visual/human navigation, Git + Markdown for portability and diffing, and
+Claude Code / Codex / OpenCode for agentic work. All three read and
+write the same Markdown — nothing important ever lives only in one of
+them.
 
 ## The core idea: an evidence → knowledge pipeline
 
@@ -83,6 +90,8 @@ one place — `brain.config.json`.
 | `08-vendors/` | | vendor register + evaluations |
 | `09-references/` | ✔ | primary sources (contracts, vendor docs) + **source registers** |
 | `12-capabilities/` | | optional — capability register (`researched → piloted → proven`), on by default for `consulting-company` |
+| `maps/` | | optional — Obsidian Canvas views (`home.canvas` launcher + starter maps) over the same Markdown; on by default for every profile, never a source of truth |
+| `14-people/` | | optional — minimal Person/Team entities for navigation, not an HRIS; off by default, on for `team`, `engineering-management`, `consulting-company`; strict privacy boundary in `14-people/README.md` |
 | `99-inbox/` | ✔ | landing zone for unprocessed material |
 | `memory/` | ✔ | org-level learnings and patterns (quarterly review reports land here) |
 
@@ -107,11 +116,12 @@ Full rationale, CI variant, and degradation behavior: [`docs/workspace.md`](docs
 | Command | What it does |
 |---|---|
 | `make init ORG="…" [PROFILE=…]` | Instantiate for an organization with an engagement profile |
-| `make validate` | Structure (per config), links, duplicate IDs, unsourced decisions, status debt, index staleness, README/CHANGELOG version match |
+| `make validate` | Structure (per config), links, duplicate IDs, Canvas link resolution, unsourced decisions, status debt, index staleness, README/CHANGELOG version match |
 | `make index` | Regenerate `03-work/INDEX.md` (and other module indexes) from frontmatter |
 | `make workspace` | Clone all code repos from `repos.yaml` as siblings of this repo |
 | `make stats` | Content stats per active module |
 | `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` `.opencode/` projections |
+| `make new-view NAME=<slug>` | Create a new empty Canvas view at `maps/<slug>.canvas` (refuses to overwrite an existing one) |
 | `make opencode` | Launch the OpenCode TUI with `.env` loaded (falls back to the harness `.env`) |
 | `make opencode-doctor` | Check the opencode install, which `.env` was loaded, and endpoint reachability |
 

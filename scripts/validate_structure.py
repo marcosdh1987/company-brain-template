@@ -6,11 +6,16 @@ Checks:
     - required files exist for every ACTIVE module
     - relative markdown links resolve
     - duplicate IDs within a namespace (DEC-001 defined twice, etc.)
+    - Canvas files under maps/ are valid JSON and every file-node path
+      resolves (layout, color, and node content are never checked — a
+      Canvas belongs to whoever edits it)
   reported as debt (never fail the build):
     - decisions without a Source field
     - status-marker counts (CONFIRMED / PENDING VALIDATION / INFERRED /
       SUPERSEDED / BLOCKED) and `_PENDING_` placeholders per module
     - unprocessed inbox files (no `processed--` prefix)
+    - Canvas file-node references pointing at a module that is currently
+      inactive (deleted on purpose per `make init`'s own advice)
 """
 from __future__ import annotations
 
@@ -52,17 +57,25 @@ MODULE_REQUIRED = {
     "09-references": ["09-references/README.md", "09-references/source-register-template.md"],
     "99-inbox": ["99-inbox/README.md"],
     "12-capabilities": ["12-capabilities/README.md", "12-capabilities/capability-register.md"],
+    "maps": ["maps/README.md", "maps/home.canvas", "maps/_templates/blank.canvas"],
+    "14-people": ["14-people/README.md", "14-people/_templates/person.md",
+                  "14-people/_templates/team.md"],
 }
 
 STATUSES = ["CONFIRMED", "PENDING VALIDATION", "INFERRED", "SUPERSEDED", "BLOCKED"]
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)#\s]+)(#[^)]*)?\)")
-SKIP_PARTS = {".git", "_to_delete", "node_modules"}
+SKIP_PARTS = {".git", ".superpowers", "_to_delete", "node_modules"}
+# Process artifacts (specs/plans), not canonical brain content — they quote
+# markdown-with-links as example text, which isn't meant to resolve here.
+SKIP_PREFIXES = ("docs/superpowers/",)
 
 
 def md_files():
     for p in ROOT.rglob("*.md"):
-        if not (set(p.parts) & SKIP_PARTS):
-            yield p
+        rel = p.relative_to(ROOT).as_posix()
+        if (set(p.parts) & SKIP_PARTS) or rel.startswith(SKIP_PREFIXES):
+            continue
+        yield p
 
 
 def check_version_drift() -> list[str]:
@@ -92,6 +105,48 @@ def check_version_drift() -> list[str]:
     return errs
 
 
+def check_canvas_files(modules: dict) -> tuple[list[str], list[str]]:
+    """Canvas is a view, not a source of truth: validate that it opens and
+    every file-node link resolves. Never validate layout, color, group
+    contents, or 'which entities should appear' — that's user-owned.
+
+    A dangling file-node reference is a hard error UNLESS its target's
+    first path segment names a module that is currently INACTIVE per
+    brain.config.json — that's expected/harmless (the user deliberately
+    turned the module off and deleted its folder, per make init's own
+    "Inactive modules (folders may be deleted)" advice), so it's reported
+    as debt instead."""
+    errs: list[str] = []
+    debt: list[str] = []
+    maps_dir = ROOT / "maps"
+    if not maps_dir.is_dir():
+        return errs, debt
+    for canvas in sorted(maps_dir.rglob("*.canvas")):
+        rel = canvas.relative_to(ROOT)
+        try:
+            data = json.loads(canvas.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            errs.append(f"{rel}: invalid JSON ({e})")
+            continue
+        for node in data.get("nodes", []):
+            if node.get("type") != "file":
+                continue
+            target = node.get("file", "")
+            # Canvas file paths are vault-relative to the repo root —
+            # unlike markdown links, which resolve relative to the
+            # linking file's own directory.
+            if target and not (ROOT / target).exists():
+                first_segment = target.split("/", 1)[0]
+                if first_segment in modules and not modules.get(first_segment, False):
+                    debt.append(f"{rel}: node {node.get('id', '?')} "
+                                f"references missing file -> {target} "
+                                f"(module '{first_segment}' is inactive)")
+                else:
+                    errs.append(f"{rel}: node {node.get('id', '?')} "
+                                f"references missing file -> {target}")
+    return errs, debt
+
+
 def main() -> int:
     try:
         cfg = json.loads((ROOT / "brain.config.json").read_text(encoding="utf-8"))
@@ -101,7 +156,11 @@ def main() -> int:
     namespaces = cfg.get("id_namespaces", ["DEC", "SRC", "ACT", "Q", "REQ-FUN", "REQ-NFR", "BR"])
 
     errors: list[str] = []
+    canvas_debt: list[str] = []
     errors += check_version_drift()
+    if modules.get("maps", False):
+        canvas_errs, canvas_debt = check_canvas_files(modules)
+        errors += canvas_errs
 
     required = list(ALWAYS_REQUIRED)
     for mod, files in MODULE_REQUIRED.items():
@@ -173,6 +232,10 @@ def main() -> int:
         print(f"\nUnprocessed inbox files ({len(inbox_debt)}):")
         for f in inbox_debt:
             print(f"  {f}")
+    if canvas_debt:
+        print(f"\nCanvas nodes pointing at inactive modules ({len(canvas_debt)}):")
+        for c in canvas_debt:
+            print(f"  {c}")
 
     if errors:
         print("\nERRORS:")

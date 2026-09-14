@@ -56,14 +56,39 @@ beats plausible invention.
   rigor of a T2 client engagement. Never retrofit — promote the tier instead
   when the work becomes decision-grade or client-facing.
 - Numbered folders beyond the core set (`10-management/`, `11-ml-governance/`,
-  `12-capabilities/`, `13-security/`, …) are **domain modules**: optional,
-  never assumed active, declared in `brain.config.json`.
+  `12-capabilities/`, `13-security/`, `14-people/`, …) are **domain modules**:
+  optional, never assumed active, declared in `brain.config.json`. `maps/` is
+  an unnumbered presentation-layer module governed the same way (declared in
+  `brain.config.json`, never assumed active).
 - A **role hub** (`02-organization/hubs/<role>-hub.md`) is a task-oriented
   context router composed over canonical documents — it is never a new
   source of truth. It points; it does not restate.
 - Never store credentials, passwords, API keys, MFA seeds, private keys, or
   unnecessary personal data. Reference secret locations, never values.
 - Keep documents concise and actionable.
+
+## Views (`maps/`) are not knowledge
+
+`maps/` is an optional presentation layer (Obsidian Canvas) over this
+same Markdown. It exists for humans who navigate by clicking instead of
+by path. The rules are architectural, not stylistic:
+
+1. Canvas/`maps/` are views, not knowledge — they never carry a fact
+   that isn't already in a canonical Markdown document.
+2. Never derive an authoritative fact exclusively from a Canvas file.
+3. Never put canonical information only in Canvas — if it matters, it
+   has a Markdown home first.
+4. Never silently regenerate a user-edited Canvas file. Canvas becomes
+   user-owned the moment it's created; automation only creates one at
+   template checkout or via `make new-view`, never as a side effect of
+   `make validate` or `make index`.
+5. Canvas may reference canonical files freely (file nodes pointing at
+   any Markdown in the repo) — that's its entire job.
+6. An agent that never opens `maps/` still has complete access to every
+   fact in the brain — Canvas is additive, never a required read path.
+
+See `maps/README.md` and `docs/obsidian.md` for the human-facing side of
+this.
 
 ## What to read per task
 

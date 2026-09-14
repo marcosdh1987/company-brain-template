@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help init validate index workspace stats sync-skills opencode opencode-doctor
+.PHONY: help init validate index workspace stats sync-skills opencode opencode-doctor new-view
 
 # OpenCode runtime: load ./.env, else the harness .env (same variable contract).
 HARNESS_SOURCE ?= ../ml-python-base
@@ -13,7 +13,7 @@ init:  ## Instantiate: make init ORG="Acme Inc." [PROFILE=consulting|delivery-ov
 	@test -n "$(ORG)" || (echo "Usage: make init ORG=\"Acme Inc.\" [PROFILE=full]" && exit 1)
 	python3 scripts/init_brain.py --org "$(ORG)" --profile "$(or $(PROFILE),full)"
 
-validate:  ## Structure (per config), links, duplicate IDs, unsourced decisions, status debt, index staleness
+validate:  ## Structure (per config), links, duplicate IDs, Canvas link resolution, unsourced decisions, status debt, index staleness
 	python3 scripts/build_indexes.py --check
 	python3 scripts/validate_structure.py
 
@@ -31,6 +31,14 @@ print('Files and words per active module:'); \
 
 sync-skills:  ## Sync working skills from the harness + regenerate tool projections
 	python3 scripts/sync_skills.py
+
+new-view:  ## Create a new empty Canvas view: make new-view NAME=my-view
+	@test -n "$(NAME)" || (echo "Usage: make new-view NAME=my-view" && exit 1)
+	@case "$(NAME)" in */*) echo "NAME must not contain '/' — pass a flat slug (e.g. NAME=my-view), not a path"; exit 1;; esac
+	@if [ -f "maps/$(NAME).canvas" ]; then echo "maps/$(NAME).canvas already exists — pick another name or edit it directly"; exit 1; fi
+	@mkdir -p maps
+	@cp maps/_templates/blank.canvas "maps/$(NAME).canvas"
+	@echo "Created maps/$(NAME).canvas — open it in Obsidian and start editing."
 
 opencode:  ## Launch the OpenCode TUI with .env loaded (falls back to ../ml-python-base/.env)
 	@command -v opencode >/dev/null 2>&1 || { echo "❌ opencode not found. Install: brew install anomalyco/tap/opencode"; exit 1; }

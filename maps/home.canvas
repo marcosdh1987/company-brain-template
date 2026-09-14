@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"home-title","type":"text","x":-40,"y":-220,"width":940,"height":130,"text":"# Company Brain — Home\n\nThis canvas is a **launcher**, not a copy of the knowledge. Click a card to open the real Markdown hub for that section — editing happens there, not here. If Canvas ever disappears, nothing is lost: every card below is a real file already in this repo."},
+		{"id":"home-context","type":"file","file":"00-context/company-overview.md","x":0,"y":0,"width":260,"height":100},
+		{"id":"home-work","type":"file","file":"03-work/README.md","x":300,"y":0,"width":260,"height":100},
+		{"id":"home-decisions","type":"file","file":"06-decisions/decision-log.md","x":600,"y":0,"width":260,"height":100},
+		{"id":"home-people","type":"file","file":"14-people/README.md","x":0,"y":140,"width":260,"height":100},
+		{"id":"home-delivery","type":"file","file":"07-delivery/current-status.md","x":300,"y":140,"width":260,"height":100},
+		{"id":"home-capabilities","type":"file","file":"12-capabilities/README.md","x":600,"y":140,"width":260,"height":100},
+		{"id":"home-architecture","type":"file","file":"04-architecture/systems-map.md","x":0,"y":280,"width":260,"height":100},
+		{"id":"home-meetings","type":"file","file":"01-meetings/README.md","x":300,"y":280,"width":260,"height":100},
+		{"id":"home-inbox","type":"file","file":"99-inbox/README.md","x":600,"y":280,"width":260,"height":100}
+	],
+	"edges":[]
+}

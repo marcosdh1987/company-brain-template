@@ -15,7 +15,9 @@
     "09-references": true,
     "99-inbox": true,
     "memory": true,
-    "12-capabilities": false
+    "12-capabilities": false,
+    "maps": true,
+    "14-people": false
   },
   "id_namespaces": [
     "DEC",

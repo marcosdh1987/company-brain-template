@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"pf-title","type":"text","x":-40,"y":-160,"width":900,"height":90,"text":"# Portfolio\n\nStarter view for consulting/delivery profiles. Duplicate this canvas per client, or add one file node per active work unit under `03-work/`."},
+		{"id":"pf-work","type":"file","file":"03-work/README.md","x":0,"y":0,"width":260,"height":100},
+		{"id":"pf-status","type":"file","file":"07-delivery/current-status.md","x":300,"y":0,"width":260,"height":100},
+		{"id":"pf-roadmap","type":"file","file":"07-delivery/roadmap.md","x":600,"y":0,"width":260,"height":100},
+		{"id":"pf-vendors","type":"file","file":"08-vendors/vendor-register.md","x":0,"y":140,"width":260,"height":100},
+		{"id":"pf-stakeholders","type":"file","file":"00-context/stakeholders.md","x":300,"y":140,"width":260,"height":100}
+	],
+	"edges":[]
+}

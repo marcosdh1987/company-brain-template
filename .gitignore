@@ -11,5 +11,7 @@ __pycache__/
 .opencode/bun.lock
 .cursor/
 .copilot/
+.superpowers/
 .obsidian/
+maps/*.local.canvas
 _to_delete/

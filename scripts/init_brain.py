@@ -15,6 +15,12 @@ Profiles preselect active modules in brain.config.json:
   client-engagement     a single client engagement, full traceability
   full                  everything on (default)
 
+`maps` (Obsidian Canvas views) defaults on for every profile; `14-people`
+(Person/Team navigation entities) defaults on only for `team`,
+`engineering-management`, and `consulting-company`. Both ship their files
+statically — this script only flips the config flag, same as
+`12-capabilities`.
+
 The script replaces the __ORG_NAME__ placeholder, stamps the founding DEC
 date, writes the config, and lists module folders that can be deleted for the
 chosen profile (it never deletes them itself).
@@ -37,14 +43,14 @@ TEXT_EXT = {".md", ".yml", ".yaml", ".toml", ".txt", ".json"}
 # baseline so a missing key can't silently slip through unnoticed.
 _BASELINE = {"03-work": True, "04-architecture": True, "05-requirements": True,
              "07-delivery": True, "08-vendors": True, "02-organization": True,
-             "12-capabilities": False}
+             "12-capabilities": False, "maps": True, "14-people": False}
 _PROFILE_DIFFS: dict[str, dict[str, bool] | None] = {
     "consulting": {},
     "delivery-oversight": {"04-architecture": False, "02-organization": False},
     "development": {"08-vendors": False},
-    "team": {"05-requirements": False, "08-vendors": False},
-    "engineering-management": {"08-vendors": False},
-    "consulting-company": {"12-capabilities": True},
+    "team": {"05-requirements": False, "08-vendors": False, "14-people": True},
+    "engineering-management": {"08-vendors": False, "14-people": True},
+    "consulting-company": {"12-capabilities": True, "14-people": True},
     "client-engagement": {},
     "full": None,  # empty overrides: leave brain.config.json's existing values as-is
 }

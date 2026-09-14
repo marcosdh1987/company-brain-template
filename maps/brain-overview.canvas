@@ -1,0 +1,17 @@
+{
+	"nodes":[
+		{"id":"bo-title","type":"text","x":-40,"y":-220,"width":1200,"height":110,"text":"# Evidence -> Knowledge Pipeline\n\nLeft column is raw evidence. Right column is canonical, statused knowledge. Promotion (analyze, validate, cite a source) is what turns one into the other — never a silent copy."},
+		{"id":"bo-inbox","type":"file","file":"99-inbox/README.md","x":0,"y":0,"width":260,"height":90},
+		{"id":"bo-meetings","type":"file","file":"01-meetings/README.md","x":0,"y":130,"width":260,"height":90},
+		{"id":"bo-references","type":"file","file":"09-references/README.md","x":0,"y":260,"width":260,"height":90},
+		{"id":"bo-decisions","type":"file","file":"06-decisions/decision-log.md","x":560,"y":0,"width":260,"height":90},
+		{"id":"bo-requirements","type":"file","file":"05-requirements/functional.md","x":560,"y":130,"width":260,"height":90},
+		{"id":"bo-context","type":"file","file":"00-context/company-overview.md","x":560,"y":260,"width":260,"height":90},
+		{"id":"bo-work","type":"file","file":"03-work/README.md","x":560,"y":390,"width":260,"height":90}
+	],
+	"edges":[
+		{"id":"bo-e1","fromNode":"bo-inbox","fromSide":"right","toNode":"bo-decisions","toSide":"left","label":"promoted"},
+		{"id":"bo-e2","fromNode":"bo-meetings","fromSide":"right","toNode":"bo-requirements","toSide":"left","label":"promoted"},
+		{"id":"bo-e3","fromNode":"bo-references","fromSide":"right","toNode":"bo-context","toSide":"left","label":"promoted"}
+	]
+}
