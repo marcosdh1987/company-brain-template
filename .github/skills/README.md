@@ -94,3 +94,4 @@ sync deletes and rebuilds them.
 | `quarterly_context_review` | Quarterly anti-drift audit |
 | `record_decision` | Record a decision as a DEC entry |
 | `update_domain_context` | Absorb a business change consistently |
+| `query_system_of_record` | Read from an external system of record through a local read-only bridge; never promotes |

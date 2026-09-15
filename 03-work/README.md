@@ -1,8 +1,9 @@
 # 03-work
 
 One folder per **work unit** — a client engagement, sales opportunity,
-internal product, or initiative. Copy the tier template that matches its
-rigor (`_templates/t0/`, `t1/`, or `t2/`) to start one. Work-unit folders hold
+internal product, or initiative. Copy the tier template that matches how many
+documents it needs (`_templates/t0/`, `t1/`, or `t2/`) to start one. Work-unit
+folders hold
 the unit's **canonical** documents; their evidence still lands in
 `01-meetings/`, `09-references/`, or `99-inbox/` and gets promoted here.
 
@@ -26,21 +27,31 @@ updated: 2025-01-15
 ```
 
 `type` and `stage` describe *what* the work is and where it stands. `tier`
-sets *how much rigor* it carries — see below. Keep `updated` current; it is
-what `scripts/build_indexes.py` uses to flag stale work units.
+sets *how many documents* it carries. Keep `updated` current; it is what
+`scripts/build_indexes.py` reads.
 
-## Graduated rigor (tiers)
+**`tier` is size; `type` is rigor.** How much traceability each claim owes is
+set by `type`, not by tier, and the table that governs it lives in
+[`AGENTS.md`](../AGENTS.md) → "Graduated rigor". A one-page `opportunity` owes
+full sourcing at T0; a large internal `initiative` owes `owner` and `updated` at
+T2. Do not promote a tier in order to earn the right to cite a source — that
+buys ceremony and pays nothing.
 
-Not every work unit needs the same ceremony. Tier is a judgment call by the
-owner, revisited as the work unit matures — an exploratory T0 idea that turns
-into a client proposal should be promoted to T1/T2, not retrofitted after the
-fact.
+## Tiers — the document set
+
+Not every work unit needs the same number of documents. Tier is a judgment call
+by the owner, revisited as the work unit grows: a tier **rises** by adding
+files, and never falls.
 
 | Tier | Use for | Shape |
 |---|---|---|
-| **T0** | Internal chats, early exploration, ideas not yet worth structuring | Single `overview.md`: what it's about, notes, next steps. No source-per-claim requirement. |
-| **T1** | Active internal or low-stakes work; opportunities being scoped | `overview.md`, `current-state.md`, `open-questions.md`, `change-log.md`. Cite sources only for claims that are client-facing or feed a decision. |
-| **T2** | Client engagements, anything that ends in a commercial proposal, or work that feeds `06-decisions/` | Full shape below. Every non-obvious claim carries a status and a source. |
+| **T0** | Internal chats, early exploration, ideas not yet worth structuring | Single `overview.md`: what it's about, notes, next steps. |
+| **T1** | Active internal or low-stakes work; opportunities being scoped | `overview.md`, `current-state.md`, `open-questions.md`, `change-log.md`. |
+| **T2** | Work large enough to need the full document set — typically a client engagement or anything feeding `06-decisions/` | Full shape below. |
+
+The tier contract *is* the template folder: `make validate` derives the files a
+tier owes from `_templates/t<N>/`, so adding a file there enforces it for every
+unit at that tier.
 
 T2 (`_templates/t2/`) shape, the proven one from real engagements:
 
@@ -57,4 +68,4 @@ T2 (`_templates/t2/`) shape, the proven one from real engagements:
 
 Keep **current state / target state / recommendation / decision** separate in
 every document — blurring them is the #1 source of false confidence,
-regardless of tier.
+regardless of tier or type.

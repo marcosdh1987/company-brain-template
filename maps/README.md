@@ -17,12 +17,13 @@ knowledge" section for the full rule set.
 | View | Purpose | Most useful for |
 |---|---|---|
 | `home.canvas` | Launcher — one card per major section, pointing at its real hub file | every profile |
-| `brain-overview.canvas` | The evidence → knowledge pipeline as a diagram | `full` |
+| `brain-overview.canvas` | Content navigation across evidence and canonical sections | `full` |
+| `brain-operating-model.canvas` | Conceptual sources → bridges → human review → knowledge → use | every profile |
 | `portfolio.canvas` | Work units, delivery status, roadmap, vendors | `consulting`, `consulting-company`, `delivery-oversight`, `client-engagement` |
 | `management.canvas` | Team → person → client/project/meeting navigation | `team`, `engineering-management`, `consulting-company` |
 | `architecture-capabilities.canvas` | Systems, repos, integrations, and shipped capabilities | `development`, `engineering-management`, `consulting-company` |
 
-All five ship in every brain regardless of profile — the "most useful
+All six ship in every brain regardless of profile — the "most useful
 for" column is a suggestion, not an enforced rule. If a card points at a
 module your profile left inactive, the linked file still exists (module
 folders are never deleted automatically); delete the card, or the whole

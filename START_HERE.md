@@ -7,7 +7,8 @@ given task. Load only the sections the active task needs.
 
 ## Human / visual vs. agent / developer
 
-- **Human / visual:** open this repo as an Obsidian vault, then
+- **Human / visual:** start at [`Home.md`](Home.md), which renders anywhere.
+  For the visual layer, open this repo as an Obsidian vault, then
   [`maps/home.canvas`](maps/home.canvas) — a clickable launcher into the
   same Markdown below. See [`docs/obsidian.md`](docs/obsidian.md).
 - **Agent / developer:** keep reading — [`AGENTS.md`](AGENTS.md) and this

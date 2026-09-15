@@ -1,6 +1,6 @@
 {
 	"nodes":[
-		{"id":"mg-title","type":"text","x":-40,"y":-220,"width":1000,"height":150,"text":"# Management\n\nStarter view for team-shaped brains. Add one file node per real person/team under `14-people/` (duplicate `_templates/person.md` and `_templates/team.md`), then link them here — Company -> Team -> Person -> Client/Project/Meeting. Nothing about compensation, health, or private feedback belongs in `14-people/` — see `14-people/README.md`."},
+		{"id":"mg-title","type":"text","x":-40,"y":-220,"width":1000,"height":150,"text":"# Management\n\nStarter view for team-shaped brains. Add one file node per real person/team under `14-people/` (duplicate `_templates/person.md` and `_templates/team.md`), then link them here — Company -> Team -> Person -> Client/Project/Meeting. What may and may not be recorded about a person is defined once, in `02-organization/privacy-boundaries.md`."},
 		{"id":"mg-people","type":"file","file":"14-people/README.md","x":0,"y":0,"width":260,"height":100},
 		{"id":"mg-ownership","type":"file","file":"02-organization/ownership.md","x":300,"y":0,"width":260,"height":100},
 		{"id":"mg-work","type":"file","file":"03-work/README.md","x":600,"y":0,"width":260,"height":100},

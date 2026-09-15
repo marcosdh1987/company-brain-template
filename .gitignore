@@ -12,6 +12,18 @@ __pycache__/
 .cursor/
 .copilot/
 .superpowers/
-.obsidian/
+# Obsidian: version the portable vault defaults, ignore local state.
+# workspace.json holds one machine's open tabs; appearance.json holds one
+# person's theme. app.json, core-plugins.json, graph.json and the snippets are
+# the same for everyone who opens this brain, so they ship.
+.obsidian/*
+!.obsidian/app.json
+!.obsidian/core-plugins.json
+!.obsidian/graph.json
+!.obsidian/snippets/
+!.obsidian/snippets/*.css
 maps/*.local.canvas
 _to_delete/
+
+# Telemetry opt-in is per person, never committed (ship the .example)
+.engobs.toml

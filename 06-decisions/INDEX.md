@@ -5,3 +5,4 @@
 | ID | Title | Status |
 |---|---|---|
 | [DEC-001](decision-log.md#dec-001) | Adopt the company brain | ACCEPTED |
+| [DEC-002](decision-log.md#dec-002) | Rigor follows a work unit's type; tier sets its document set | ACCEPTED |

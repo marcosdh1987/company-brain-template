@@ -4,6 +4,7 @@
 - **Participants:**
 - **Objective:**
 - **Source artifacts:** <link to transcript / recording / notes>
+- **People mentioned:** <relative links, so this note surfaces in their backlinks>
 
 ## Summary
 

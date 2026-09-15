@@ -12,28 +12,32 @@ and `consulting-company` profiles (`brain.config.json` →
 
 ## Privacy boundary — read this before adding anyone
 
-**Allowed** (shareable, professional, operational):
-- role
-- team
-- public/professional location
-- specialty
-- project
-- assignment
-- operational meetings
-- work relationships
+The allowlist of fields a person page may carry, and the categories that may
+never enter this repository at all, are written down **once**, in
+[`docs/privacy-boundaries.md`](../docs/privacy-boundaries.md). Read it before adding a
+person.
 
-**Never store here** (this is a hard boundary, not a style preference):
-- compensation
-- health
-- disciplinary records
-- private performance feedback
-- confidential 1:1 content
-- unnecessary personal information
+If a fact about a person doesn't fit the allowlist, it doesn't belong in this
+module — full stop. Route it to whatever system your organization already uses
+for that, and reference that system's *location* here if you must, never its
+content.
 
-If a fact about a person doesn't fit the allowed list, it doesn't belong
-in this module — full stop. Route it to whatever system your
-organization already uses for that (HRIS, private 1:1 notes, etc.), and
-reference that system's *location* here if you must, never its content.
+Two conventions keep this module honest as it grows:
+
+- **A person's own page is authoritative for their current assignment.** Every
+  other page links to it rather than restating it, so there is one place to
+  correct when someone moves.
+- **Not everyone gets a page.** People outside this brain's scope are named
+  where the evidence names them and nothing more: no page, no roster entry, no
+  capacity figure. When a working group spans teams, record only the in-scope
+  share and say explicitly that the rest sits outside this brain. A page is a
+  commitment to keep something current; do not make it for someone whose
+  information you do not own.
+
+If your organization also records client relationships as entities, note that
+such a record is a *relationship*, not a work unit, and never a substitute for
+one — and never infer participation in a work unit from an assignment to a
+client. Link a person to a work unit only when a source confirms it.
 
 ## Contents
 

@@ -1,0 +1,52 @@
+/* Company Brain navigation — entirely cosmetic, and optional.
+   Home.md is a plain Markdown table of links: it reads fine with this snippet
+   disabled, which is why nothing in `make validate` depends on it. */
+
+/* ---- Home.md: render the link table as cards ---- */
+.brain-home table {
+  border-collapse: separate;
+  border-spacing: 12px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.brain-home table thead {
+  display: none;
+}
+
+.brain-home table td {
+  position: relative;
+  padding: 16px 18px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  background: var(--background-secondary);
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.brain-home table td:hover {
+  border-color: var(--interactive-accent);
+}
+
+.brain-home table td strong {
+  font-size: 1.05em;
+}
+
+/* The whole card is the click target: the link's own box is stretched over the
+   cell, so there is no small-text aiming. */
+.brain-home table td a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+}
+
+.brain-home table td a {
+  text-decoration: none;
+}
+
+/* ---- Canvas: open a card on the first click, instead of selecting it ---- */
+.canvas-node-content a {
+  position: relative;
+  z-index: 1;
+}

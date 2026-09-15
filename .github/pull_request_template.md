@@ -6,5 +6,5 @@
 - [ ] Conflicts with existing decisions/requirements checked and flagged
 - [ ] Statuses used correctly (CONFIRMED only with evidence or approval)
 - [ ] Processed inbox files renamed `processed--` or moved to their home
-- [ ] No credentials, secrets, or unnecessary personal data
+- [ ] No credentials, secrets, or restricted personal data ([boundaries](../docs/privacy-boundaries.md))
 - [ ] `make validate` passes

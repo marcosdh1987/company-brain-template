@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","x":0,"y":-240,"width":2000,"height":150,"text":"# How this brain works\n\nSources → bridges → human review → durable knowledge → everyday use\n\n[Operating rules](../AGENTS.md) · [Model and examples](../docs/obsidian.md#operating-model)"},
+		{"id":"zone-sources","type":"group","x":-20,"y":-30,"width":360,"height":690,"label":"C · External sources","color":"5"},
+		{"id":"zone-bridges","type":"group","x":400,"y":-30,"width":360,"height":690,"label":"D · Tools / bridges","color":"2"},
+		{"id":"zone-human","type":"group","x":820,"y":-30,"width":360,"height":690,"label":"A · Human workspace","color":"0"},
+		{"id":"zone-brain","type":"group","x":1240,"y":-30,"width":360,"height":690,"label":"B · Canonical brain","color":"4"},
+		{"id":"zone-use","type":"group","x":1660,"y":-30,"width":360,"height":690,"label":"E · Outputs / use","color":"6"},
+		{"id":"sources","type":"text","x":0,"y":20,"width":320,"height":140,"color":"5","text":"### Corporate sources\n\nOfficial records stay outside the brain.\n\n[Integration register](../04-architecture/integrations.md)"},
+		{"id":"examples","type":"text","x":0,"y":220,"width":320,"height":170,"color":"5","text":"### Source examples\n\nNotion · GitHub · Calendar / Artemis · Slack\n\nIllustrative; connections pending."},
+		{"id":"source-rule","type":"text","x":0,"y":450,"width":320,"height":160,"color":"5","text":"### Reference, summarize, date\n\nKeep links and dated summaries of corporate records.\n\n[Source register](../09-references/README.md)"},
+		{"id":"bridges","type":"text","x":420,"y":20,"width":320,"height":140,"color":"2","text":"### Read / query\n\nSkills fetch evidence on demand.\n\n[query_system_of_record](../.github/skills/query_system_of_record.md)"},
+		{"id":"assistants","type":"text","x":420,"y":220,"width":320,"height":170,"color":"2","text":"### Assisted maintenance\n\nClaude / Codex · search · scripts · agents\n\n[AI policy](../02-organization/ai-policy.md)"},
+		{"id":"bridge-examples","type":"text","x":420,"y":450,"width":320,"height":160,"color":"2","text":"### Bridge examples\n\nquery_notion_bot · ask_artemis\n\nIllustrative; setup pending."},
+		{"id":"human","type":"text","x":840,"y":20,"width":320,"height":140,"color":"0","text":"### Review in Obsidian\n\nCheck evidence and curate manually.\n\n[Human entry point](../Home.md)"},
+		{"id":"capture","type":"text","x":840,"y":220,"width":320,"height":170,"color":"0","text":"### Meetings / quick notes\n\nCapture everyday work before promotion.\n\n[Meetings](../01-meetings/README.md) · [Inbox](../99-inbox/README.md)"},
+		{"id":"promote","type":"text","x":840,"y":450,"width":320,"height":160,"color":"0","text":"### Promotion gate\n\nValidate, cite, date and mark status.\n\n[Rules](../AGENTS.md#processing-workflow-meetings-and-raw-sources)"},
+		{"id":"brain","type":"text","x":1260,"y":20,"width":320,"height":140,"color":"4","text":"### Durable Markdown\n\nCurated knowledge with traceable sources.\n\n[Knowledge rules](../AGENTS.md#source-of-truth-priority)"},
+		{"id":"sections","type":"text","x":1260,"y":220,"width":320,"height":170,"color":"4","text":"### Canonical sections\n\n[Context](../00-context/company-overview.md) · [Work](../03-work/README.md)\n\n[Decisions](../06-decisions/decision-log.md) · [Delivery](../07-delivery/current-status.md)\n\n[Requirements](../05-requirements/functional.md)"},
+		{"id":"optional","type":"text","x":1260,"y":450,"width":320,"height":160,"color":"4","text":"### Profile-dependent\n\nManagement and Capabilities belong here when enabled.\n\n[Module configuration](../brain.config.json)"},
+		{"id":"use","type":"text","x":1680,"y":20,"width":320,"height":140,"color":"6","text":"### Views / navigation\n\nCanvas and hubs point to Markdown.\n\n[Home](../Home.md) · [Overview](brain-overview.canvas)"},
+		{"id":"daily","type":"text","x":1680,"y":220,"width":320,"height":170,"color":"6","text":"### Daily use\n\nManagement · project follow-up · meeting continuity\n\n[Delivery](../07-delivery/current-status.md) · [Meetings](../01-meetings/README.md)"},
+		{"id":"context","type":"text","x":1680,"y":450,"width":320,"height":160,"color":"6","text":"### Shared context\n\nEngineering context · manager communication\n\n[Agent router](../START_HERE.md) · [Role hubs](../02-organization/README.md)"},
+		{"id":"legend","type":"text","x":0,"y":740,"width":2000,"height":190,"color":"0","text":"### Legend\n\nBlue · Source = external record or context   |   Orange · Bridge = read / query mechanism\n\nGray · Raw / review = evidence awaiting promotion   |   Green · Canonical = durable curated knowledge\n\nPurple · View / use = navigation and consumption; facts live in Markdown."}
+	],
+	"edges":[
+		{"id":"query","fromNode":"sources","fromSide":"right","toNode":"bridges","toSide":"left","toEnd":"arrow","label":"query / read","color":"5"},
+		{"id":"review","fromNode":"bridges","fromSide":"right","toNode":"human","toSide":"left","toEnd":"arrow","label":"evidence","color":"2"},
+		{"id":"capture-review","fromNode":"capture","fromSide":"top","toNode":"human","toSide":"bottom","toEnd":"arrow","label":"manual input","color":"0"},
+		{"id":"review-promote","fromNode":"human","fromSide":"right","toNode":"promote","toSide":"right","toEnd":"arrow","label":"review","color":"0"},
+		{"id":"promotion","fromNode":"promote","fromSide":"right","toNode":"brain","toSide":"bottom","toEnd":"arrow","label":"promote","color":"4"},
+		{"id":"consume","fromNode":"brain","fromSide":"right","toNode":"use","toSide":"left","toEnd":"arrow","label":"read / navigate","color":"6"}
+	]
+}

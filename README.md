@@ -1,4 +1,4 @@
-# Company Brain Template — v2.2
+# Company Brain Template — v2.3
 
 Template for instantiating a **company brain**: the persistent, agent-readable
 knowledge base for an engagement with one organization — its context,
@@ -10,8 +10,10 @@ This structure is not theoretical: it consolidates what two real client brains
 converged on independently, plus the traceability patterns they developed
 (status vocabulary, source registers, promotion pipeline).
 
-Three files, three purposes — read them in this order:
+Four files, four purposes — read them in this order:
 
+- **[`Home.md`](Home.md)** — the reader's door: a link table into every part of
+  the brain, for whoever is not here to change how it works.
 - **[`START_HERE.md`](START_HERE.md)** — context router: where to look first
   for a given task.
 - **[`AGENTS.md`](AGENTS.md)** — the operating rules.
@@ -54,7 +56,11 @@ Existing Project".
 make init ORG="Acme Inc." PROFILE=consulting
 #    profiles: consulting | delivery-oversight | development | full |
 #              team | engineering-management | consulting-company |
-#              client-engagement
+#              client-engagement | org-layer
+#
+#    org-layer is the shared organization brain: company context, conventions,
+#    policy and org-wide decisions, with no work units. A team's own brain
+#    references it as a source of record instead of copying it.
 
 # 2. Populate with the bootstrap skill (from your AI assistant)
 #    → .github/skills/bootstrap_company_brain.md
@@ -111,16 +117,20 @@ Day 1 for a developer: clone the brain, run `make workspace` — it reads
 `04-architecture/repos.yaml` and clones every registered repo alongside.
 Full rationale, CI variant, and degradation behavior: [`docs/workspace.md`](docs/workspace.md).
 
+Every instance is a **fork of this template with shared git history**, so a new
+release arrives as `git merge upstream/main`, not as a manual port. How to start
+one and how to take a release: [`docs/upgrading.md`](docs/upgrading.md).
+
 ## Commands
 
 | Command | What it does |
 |---|---|
 | `make init ORG="…" [PROFILE=…]` | Instantiate for an organization with an engagement profile |
-| `make validate` | Structure (per config), links, duplicate IDs, Canvas link resolution, unsourced decisions, status debt, index staleness, README/CHANGELOG version match |
+| `make validate` | Structure (per config), links, duplicate IDs, Canvas file-node and text-card links, work-unit frontmatter, index staleness, README/CHANGELOG version match; reports unsourced decisions, status, work-unit and possible-secret debt |
 | `make index` | Regenerate `03-work/INDEX.md` (and other module indexes) from frontmatter |
 | `make workspace` | Clone all code repos from `repos.yaml` as siblings of this repo |
 | `make stats` | Content stats per active module |
-| `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` `.opencode/` projections |
+| `make sync-skills` | Sync working skills from the harness + regenerate `.claude/` `.codex/` `.agents/` `.opencode/` projections. Refuses an upstream skill that would drop frontmatter keys and keeps the local copy; `python3 scripts/sync_skills.py --force` overrides |
 | `make new-view NAME=<slug>` | Create a new empty Canvas view at `maps/<slug>.canvas` (refuses to overwrite an existing one) |
 | `make opencode` | Launch the OpenCode TUI with `.env` loaded (falls back to the harness `.env`) |
 | `make opencode-doctor` | Check the opencode install, which `.env` was loaded, and endpoint reachability |

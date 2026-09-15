@@ -7,7 +7,7 @@
 | Durable engagement context: domain, decisions, requirements, conventions, systems, vendors | Product code |
 | Registered evidence (contracts, transcripts, vendor docs) with a source register | Docs of a specific repo (they go in that repo) |
 | The organization's AI policy and ways of working | Engineering skills/rules enforcement (that is the harness) |
-| | Secrets, credentials, unnecessary personal data |
+| | Secrets, credentials, restricted personal data ([boundaries](../docs/privacy-boundaries.md)) |
 
 ## How it changes
 

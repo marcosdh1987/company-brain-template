@@ -1,0 +1,14 @@
+# Telemetry is OFF unless you copy this file to `.engobs.toml`.
+#
+# No endpoint ships with the template: standing one up is your decision, and
+# `.engobs.toml` is gitignored so one person's opt-in is not everyone's.
+# See docs/telemetry.md before enabling this.
+
+endpoint = "_PENDING_"
+organization = "__ORG_NAME__"
+project = "_PENDING_"
+
+# Event counts and timings only — never document content, file names, quotes,
+# or personal data.
+privacy_mode = "standard"
+verify_tls = true

@@ -18,6 +18,7 @@ The governed skills below are projected into `.opencode/skills/`. Internal skill
 - `bootstrap_company_brain` — Use when instantiating the company-brain template for an organization — fresh start or migration of an org with existing history. Guides profile selection, source mining, interviews, and initial promotion, replacing _PENDING_ placeholders only with verified, cited content.
 - `process_meeting` — Use after a meeting — takes a transcript or raw notes from 01-meetings/transcripts/ or 99-inbox/ and produces reviewed minutes plus fully promoted knowledge (decisions, requirements, questions, risks, actions), leaving the source marked processed.
 - `quarterly_context_review` — Use every ~90 days (or after major changes) to fight drift — audits canonical content against reality, marks SUPERSEDED/PENDING VALIDATION where the world moved, measures debt, and reports brain health to the owners.
+- `query_system_of_record` — Use when a task needs current content from an external system of record (wiki, tracker, CRM, HR system) reachable through a local read-only bridge — fetches the answer, marks it PENDING VALIDATION with a dated citation and its read scope, and never promotes it on its own. Register the bridge in 04-architecture/integrations.md before first use.
 - `record_decision` — Use when a decision was made (or proposed) that affects the engagement — records it as an immutable DEC entry in the decision log with mandatory source, handling supersession and status correctly.
 - `update_domain_context` — Use when the business changed — entity, rule, integration, vocabulary or scope — and the brain must absorb it without drifting - locates every affected section, updates them consistently with status and source.
 
@@ -39,19 +40,10 @@ Refresh this layout with `make sync-skills`.
   must pass before any work is called done. There is no linter or test suite.
 - Run `make index` after adding or retyping a work unit in `03-work/`;
   `make validate` fails on a stale index.
-- Never invent business or technical facts. A `_PENDING_` placeholder with an
-  owner beats a plausible guess. Mark every non-obvious claim with the status
-  vocabulary from `AGENTS.md`.
-- Raw material in `99-inbox/` and `01-meetings/transcripts/` is evidence, not
-  validated fact. Promote it through the workflow in `AGENTS.md`, with a source.
-- Decisions are immutable: record new ones with the `record_decision` skill,
-  never edit an existing `DEC-XXX`.
-- Work-unit content stays in `03-work/<unit>/`; cross-cutting content in the
-  shared sections.
-- Never store credentials, keys or unnecessary personal data — reference where a
-  secret lives, never its value.
-- Interact in the same language as the user; keep document content in the
-  language the document already uses.
+- **Every operating rule lives in `AGENTS.md`** — the status vocabulary, the
+  evidence rule, decision immutability, the language rule and the privacy
+  boundary included. Read it; do not restate it here. A rule that exists in two
+  files is a rule that will disagree with itself.
 - Never commit. The owner makes every commit; report the changed files instead.
 
 ## Models and providers

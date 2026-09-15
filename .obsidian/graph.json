@@ -1,0 +1,20 @@
+{
+  "colorGroups": [
+    { "query": "path:03-work", "color": { "a": 1, "rgb": 5431378 } },
+    { "query": "path:06-decisions", "color": { "a": 1, "rgb": 11621088 } },
+    { "query": "path:07-delivery", "color": { "a": 1, "rgb": 14725458 } },
+    { "query": "path:00-context OR path:02-organization", "color": { "a": 1, "rgb": 5395199 } },
+    { "query": "path:01-meetings OR path:09-references OR path:99-inbox", "color": { "a": 1, "rgb": 9671571 } },
+    { "query": "path:12-capabilities", "color": { "a": 1, "rgb": 11621088 } },
+    { "query": "path:14-people", "color": { "a": 1, "rgb": 14832100 } }
+  ],
+  "hideUnresolved": true,
+  "showTags": false,
+  "showAttachments": false,
+  "lineSizeMultiplier": 1,
+  "nodeSizeMultiplier": 1.2,
+  "centerStrength": 0.5,
+  "repelStrength": 11,
+  "linkStrength": 1,
+  "linkDistance": 260
+}

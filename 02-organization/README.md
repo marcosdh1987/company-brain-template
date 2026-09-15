@@ -7,6 +7,7 @@ How this organization works — the layer code repos and agents consume as
 | File | What it declares |
 |---|---|
 | `ai-policy.md` | The org's AI posture — mandatory reading for any AI-assisted work |
+| `automation-map.md` | One zone per class of automated update: allowed targets, required checks, and what is forbidden |
 | `ways-of-working.md` | Cadence, ceremonies, communication defaults |
 | `conventions/engineering.md` | Cross-repo engineering conventions and minimum gates |
 | `conventions/git-workflow.md` | Branching, commits, PRs, releases |

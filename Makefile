@@ -9,12 +9,11 @@ OPENCODE_ENV ?= $(firstword $(wildcard .env $(HARNESS_SOURCE)/.env))
 help:  ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-init:  ## Instantiate: make init ORG="Acme Inc." [PROFILE=consulting|delivery-oversight|development|full|team|engineering-management|consulting-company|client-engagement]
+init:  ## Instantiate: make init ORG="Acme Inc." [PROFILE=consulting|delivery-oversight|development|full|team|engineering-management|consulting-company|client-engagement|org-layer]
 	@test -n "$(ORG)" || (echo "Usage: make init ORG=\"Acme Inc.\" [PROFILE=full]" && exit 1)
 	python3 scripts/init_brain.py --org "$(ORG)" --profile "$(or $(PROFILE),full)"
 
-validate:  ## Structure (per config), links, duplicate IDs, Canvas link resolution, unsourced decisions, status debt, index staleness
-	python3 scripts/build_indexes.py --check
+validate:  ## Structure (per config), links, duplicate IDs, Canvas links, work-unit frontmatter, index staleness, debt
 	python3 scripts/validate_structure.py
 
 index:  ## Regenerate generated indexes (03-work, 06-decisions, 05-requirements)

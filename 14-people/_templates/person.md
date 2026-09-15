@@ -14,5 +14,5 @@ then link it from their team's `members` list and from any work unit or
 client they're assigned to.
 
 Only the fields above and free-form professional notes belong here — see
-the privacy boundary in `14-people/README.md` before adding anything
+the privacy boundary in `../../docs/privacy-boundaries.md` before adding anything
 else.

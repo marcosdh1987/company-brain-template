@@ -24,6 +24,16 @@ What it does:
      BEGIN/END GENERATED SKILLS sentinels) with the projected skill list.
 
 Idempotent. Run after every harness release adoption.
+
+Two safety rules, both of which cost something to learn:
+  - A projection is cleared through its `.generated-manifest.tsv`, never by
+    wiping the directory. A projection directory is a tool's own config folder,
+    so a tool or a person may keep a loose file or a hand-authored skill beside
+    the generated ones; `rmtree` takes those with it.
+  - An upstream skill that would *remove* frontmatter keys is not installed:
+    the local copy is kept and the loss reported, because a shrinking key set
+    silently degrades how every tool discovers the skill. Override with
+    `--force`.
 """
 from __future__ import annotations
 
@@ -62,6 +72,31 @@ def find_in_harness(harness: pathlib.Path, name: str) -> pathlib.Path | None:
         if cand.exists():
             return cand
     return None
+
+
+def frontmatter_keys(md: pathlib.Path) -> set[str]:
+    """Top-level YAML frontmatter keys of a skill file, or an empty set."""
+    if not md.is_file():
+        return set()
+    m = re.match(r"---\n(.*?)\n---", md.read_text(encoding="utf-8"), re.S)
+    if not m:
+        return set()
+    return {k.group(1) for k in re.finditer(r"^([A-Za-z_][\w-]*):", m.group(1), re.M)}
+
+
+def dropped_keys(src: pathlib.Path, name: str) -> set[str]:
+    """Frontmatter keys the incoming version would remove from the local copy.
+
+    The harness is upstream and normally wins. But an upstream file that has
+    *lost* metadata — `triggers`, `maturity`, `risk`, routing fields — silently
+    degrades how every tool discovers the skill, and the loss is invisible in
+    the sync output. Content changes stay silent; a shrinking key set does not.
+    """
+    current = EXTERNAL / name / "SKILL.md"
+    incoming = src / "SKILL.md" if src.is_dir() else src
+    if not current.is_file():
+        return set()
+    return frontmatter_keys(current) - frontmatter_keys(incoming)
 
 
 def install_external(src: pathlib.Path, name: str) -> pathlib.Path:
@@ -112,6 +147,33 @@ def internal_skills():
     return found
 
 
+def clear_generated(proj: pathlib.Path) -> None:
+    """Remove only what a previous run generated, never anything else.
+
+    A projection directory belongs to a tool, not to this script: a tool or a
+    person may keep a loose config file or a hand-authored skill beside the
+    generated ones. The manifest records exactly which entries the last run
+    wrote, so only those are removed; when there is no manifest, fall back to
+    directories that look like a projected skill (they contain `SKILL.md`).
+    Loose files are always left alone.
+    """
+    if not proj.is_dir():
+        return
+    manifest = proj / ".generated-manifest.tsv"
+    names: set[str] = set()
+    if manifest.is_file():
+        for line in manifest.read_text(encoding="utf-8").splitlines():
+            if line.startswith("#") or not line.strip():
+                continue
+            names.add(line.split("\t")[0])
+        manifest.unlink()
+    for child in proj.iterdir():
+        if not child.is_dir():
+            continue  # never touch loose files (settings.json, README, ...)
+        if child.name in names or (not names and (child / "SKILL.md").is_file()):
+            shutil.rmtree(child)
+
+
 def regenerate_projections():
     entries = []  # (name, kind, source_path)
     for f in internal_skills():
@@ -121,9 +183,8 @@ def regenerate_projections():
             if d.is_dir() and (d / "SKILL.md").exists():
                 entries.append((d.name, "external", d))
     for proj in PROJECTIONS:
-        if proj.exists():
-            shutil.rmtree(proj)
-        proj.mkdir(parents=True)
+        clear_generated(proj)
+        proj.mkdir(parents=True, exist_ok=True)
         rows = []
         for name, kind, src in entries:
             dest = proj / name
@@ -201,10 +262,24 @@ def main() -> int:
         print(f"WARNING: harness source not found at {harness} — skipping external sync,")
         print("         regenerating projections from what is already present.")
         wanted = []
+
+    prev_lock = json.loads(LOCK.read_text(encoding="utf-8")) if LOCK.is_file() else {}
+    prev_skills = prev_lock.get("skills", {})
+    force = "--force" in sys.argv
+    degraded: list[str] = []
+
     for name in wanted:
         src = find_in_harness(harness, name)
         if src is None:
             missing.append(name)
+            continue
+        lost = dropped_keys(src, name)
+        if lost and not force:
+            degraded.append(f"{name} (would drop: {', '.join(sorted(lost))})")
+            if name in prev_skills:
+                lock["skills"][name] = prev_skills[name]
+            print(f"[keep] {name}  --  local copy kept; upstream would drop: "
+                  f"{', '.join(sorted(lost))}")
             continue
         dest = install_external(src, name)
         lock["skills"][name] = {"origin": str(src.relative_to(harness)),
@@ -217,10 +292,17 @@ def main() -> int:
     ensure_antigravity_rules()
     render_opencode_skills_block(entries)
     print(f"[proj] {len(entries)} skills projected to .claude/ .codex/ .agents/ .opencode/")
+    if degraded:
+        print(f"\nWARNING: {len(degraded)} skill(s) kept at the local version because the")
+        print("         upstream copy has lost frontmatter keys:")
+        for d in degraded:
+            print(f"           {d}")
+        print("         Re-run with `--force` to take upstream anyway.")
     if missing:
         print(f"WARNING: not found in harness: {', '.join(missing)}")
-        return 1
-    return 0
+    # A kept skill must not exit 0: the degradation is otherwise invisible in CI,
+    # which is the whole reason the guard exists.
+    return 1 if (missing or degraded) else 0
 
 
 if __name__ == "__main__":

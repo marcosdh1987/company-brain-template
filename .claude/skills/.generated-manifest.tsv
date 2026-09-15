@@ -3,6 +3,7 @@ add_runbook	internal	.github/skills/add_runbook.md
 bootstrap_company_brain	internal	.github/skills/bootstrap_company_brain.md
 process_meeting	internal	.github/skills/process_meeting.md
 quarterly_context_review	internal	.github/skills/quarterly_context_review.md
+query_system_of_record	internal	.github/skills/query_system_of_record.md
 record_decision	internal	.github/skills/record_decision.md
 update_domain_context	internal	.github/skills/update_domain_context.md
 brainstorm_quick	external	.github/skills-external/brainstorm_quick

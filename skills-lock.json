@@ -7,7 +7,7 @@
     },
     "brainstorm_quick": {
       "origin": ".github/skills/brainstorm_quick.md",
-      "sha256": "6cf68195b67500736fa56bca65612cccd57981dffe4e597b49f75cf72a7e77be"
+      "sha256": "a71ad5f99ece2b361118765401905a3db077b975df2f028f8648d343a64ff6fd"
     },
     "writing-plans": {
       "origin": ".github/skills-external/writing-plans",
@@ -19,11 +19,11 @@
     },
     "research_current_info": {
       "origin": ".github/skills/research_current_info.md",
-      "sha256": "430eeefacff90253392eb52acd4204d50dde859637f8ae5b2028be06697a98a5"
+      "sha256": "c7014359e09168c44df111e09925a0561aa2dd7924f0a97ce6911f5334a44619"
     },
     "retrospective": {
       "origin": ".github/skills/retrospective.md",
-      "sha256": "95dcefc2569c5ce9654c67d0fb16f08c91930a4bf06294a77a8ae4858243c5a0"
+      "sha256": "f5c3644e60cc3385a24c03e176fe1ac784473dd0cb343555de06bab20964b6ea"
     }
   }
 }

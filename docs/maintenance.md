@@ -23,7 +23,8 @@ inbox, unsourced decisions), verifies owners, and writes a dated report to
 `make validate` in CI on every PR: structure per config, links, duplicate
 IDs, unsourced decisions, debt report, generated-index staleness, and
 README/CHANGELOG version match. Optionally, with the harness lab: measure
-which sections agents actually read — never-read content gets merged or
+which sections agents actually read (opt-in — see
+[`telemetry.md`](telemetry.md)) — never-read content gets merged or
 deleted.
 
 ## Generated indexes
@@ -50,3 +51,18 @@ fails on drift, so bumping one without the other is caught before merge.
 - The periodic validation check gets filled by the client without the
   consultant present.
 - Onboarding drops from weeks to days (`02-organization/runbooks/onboarding.md`).
+
+## What `make validate` now reports
+
+It is one command: it calls each generator's own `--check` itself, so a stale
+index no longer aborts make before the debt report.
+
+Two debt lines are worth a habit:
+
+- **Work-unit debt** — `_PENDING_` frontmatter, a missing display name, missing
+  tier files, and missing status markers where the unit's `type` owes them.
+- **Possible secrets** — path and category only, never the value. It does not
+  fail the build, because a secret already committed is not fixed by failing a
+  build; the history still has it. The fix is a pre-commit hook or a scanner in
+  CI. Set `fail_on_secrets: true` in `brain.config.json` once your instance has
+  audited its history and wants the harder gate.
